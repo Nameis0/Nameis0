@@ -1,0 +1,620 @@
+import re
+
+# Read existing index.html to preserve exact firebaseConfig if needed
+with open("public/index.html", "r", encoding="utf-8") as f:
+    old_index = f.read()
+
+ index_html = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WatchTelugu — Latest Indian Movies</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #121212;
+      color: #e5e5e5;
+      font-family: Arial, Helvetica, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    /* Carbon-stripe Top Header */
+    .top-banner {
+      background: repeating-linear-gradient(
+        -45deg,
+        #1e1e1e,
+        #1e1e1e 4px,
+        #161616 4px,
+        #161616 8px
+      );
+      padding: 22px 12px 18px;
+      text-align: center;
+      border-bottom: 1px solid #2e2e2e;
+    }
+    .site-title {
+      font-size: 34px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      cursor: pointer;
+    }
+    .site-subtitle {
+      font-size: 13px;
+      color: #cccccc;
+      margin-top: 6px;
+      margin-bottom: 18px;
+    }
+    .search-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .search-input {
+      flex: 1;
+      padding: 8px 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      background: #ffffff;
+      color: #111;
+      outline: none;
+    }
+    .search-btn {
+      background: linear-gradient(to bottom, #2b2b2b, #1a1a1a);
+      color: #e0e0e0;
+      border: 1px solid #444;
+      padding: 8px 22px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .search-btn:active { background: #111; }
+
+    /* Main Wrapper */
+    .main-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 8px;
+    }
+
+    /* Navigation Grid Box */
+    .nav-box {
+      background: linear-gradient(to bottom, #232323, #0c0c0c);
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 8px 10px;
+      margin-bottom: 12px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px 4px;
+    }
+    .nav-item {
+      color: #b5b5b5;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 8px 4px;
+      text-align: left;
+      cursor: pointer;
+      user-select: none;
+    }
+    .nav-item:hover, .nav-item.active {
+      color: #ffffff;
+    }
+
+    /* Section Bar (Featured Movies Free) */
+    .section-bar {
+      background: linear-gradient(to bottom, #2a2a2a 0%, #111111 50%, #050505 100%);
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 7px 12px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #d4d4d4;
+      margin-bottom: 10px;
+    }
+
+    /* 2-Column Movie Grid */
+    .movie-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .movie-card {
+      background: #161616;
+      border: 1px solid #2c2c2c;
+      padding: 5px;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .movie-card:hover {
+      border-color: #555;
+    }
+    .poster-wrap {
+      width: 100%;
+      aspect-ratio: 2 / 2.85;
+      background: #0a0a0a;
+      overflow: hidden;
+    }
+    .poster-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .card-title {
+      text-align: center;
+      font-size: 13px;
+      font-weight: bold;
+      color: #bdbdbd;
+      padding: 8px 4px 4px;
+      line-height: 1.35;
+    }
+
+    /* Movie Detail View */
+    #detailView {
+      display: none;
+      background: #141414;
+      border: 1px solid #2e2e2e;
+      margin-bottom: 24px;
+    }
+    .detail-header {
+      background: #222222;
+      padding: 14px 12px;
+      font-size: 18px;
+      font-weight: 500;
+      color: #cccccc;
+      border-bottom: 1px solid #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .back-btn {
+      background: #333;
+      color: #fff;
+      border: 1px solid #555;
+      padding: 5px 12px;
+      font-size: 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .detail-body {
+      padding: 18px 14px;
+    }
+    .detail-poster-box {
+      width: 185px;
+      margin: 6px auto 22px;
+      padding: 4px;
+      background: #0c0c0c;
+      border: 1px solid #333;
+    }
+    .detail-poster-box img {
+      width: 100%;
+      aspect-ratio: 2 / 2.85;
+      object-fit: cover;
+      display: block;
+    }
+    .info-heading {
+      color: #d9480f;
+      font-size: 16px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding-bottom: 6px;
+      border-bottom: 1.5px solid #d9480f;
+      margin-bottom: 14px;
+      display: inline-block;
+      min-width: 75%;
+    }
+    .meta-list {
+      list-style: none;
+      margin-bottom: 18px;
+    }
+    .meta-list li {
+      font-size: 14px;
+      margin-bottom: 11px;
+      line-height: 1.4;
+      color: #a6a6a6;
+       font-weight: bold;
+    }
+    .meta-list li span.val {
+      color: #f59e0b;
+      font-weight: normal;
+      margin-left: 4px;
+    }
+
+    /* Synopsis Box */
+    .synopsis-box {
+      background: #101010;
+      border-left: 4px solid #d9480f;
+      padding: 10px 12px;
+      margin-bottom: 20px;
+    }
+    .synopsis-title {
+      color: #d9480f;
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .synopsis-text {
+      color: #b8b8b8;
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+
+    /* Player Tabs */
+    .player-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .player-tab {
+      background: #111111;
+      border: 1px solid #6b21a8;
+      color: #a855f7;
+      text-align: center;
+      padding: 9px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .player-tab.active {
+      background: #2e1065;
+      color: #e9d5ff;
+      border-color: #9333ea;
+    }
+
+    /* Video Stage */
+    .player-stage {
+      width: 100%;
+      background: #080808;
+      border: 1px solid #262626;
+      position: relative;
+      overflow: hidden;
+    }
+    .poster-play-cover {
+      position: relative;
+      width: 100%;
+      max-width: 340px;
+      margin: 0 auto;
+      cursor: pointer;
+    }
+    .poster-play-cover img {
+      width: 100%;
+      display: block;
+      opacity: 0.9;
+    }
+    .big-play-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      border: 12px solid rgba(217, 72, 15, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.25);
+    }
+    .big-play-triangle {
+      width: 0;
+      height: 0;
+      border-top: 20px solid transparent;
+      border-bottom: 20px solid transparent;
+      border-left: 32px solid rgba(217, 72, 15, 0.9);
+      margin-left: 6px;
+    }
+    .iframe-wrap {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      display: none;
+    }
+    .iframe-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BANNER -->
+  <div class="top-banner">
+    <div class="site-title" onclick="showHome()">WatchTelugu</div>
+    <div class="site-subtitle">Latest Indian Movies — Telugu, Tamil, Malayalam &amp; Hindi</div>
+    <div class="search-row">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search..." oninput="filterMovies()">
+      <button type="button" class="search-btn" onclick="filterMovies()">Search</button>
+    </div>
+  </div>
+
+  <div class="main-wrap">
+    <!-- NAVIGATION CATEGORIES -->
+    <div class="nav-box" id="navBox">
+      <div class="nav-item active" onclick="selectCategory('ALL', this)">HOME</div>
+      <div class="nav-item" onclick="selectCategory('Featured', this)">FEATURED</div>
+      <div class="nav-item" onclick="selectCategory('Bollywood', this)">BOLLYWOOD</div>
+      <div class="nav-item" onclick="selectCategory('Telugu', this)">TELUGU</div>
+      <div class="nav-item" onclick="selectCategory('Tamil', this)">TAMIL</div>
+      <div class="nav-item" onclick="selectCategory('Malayalam', this)">MALAYALAM</div>
+      <div class="nav-item" onclick="selectCategory('Hollywood', this)">HOLLYWOOD</div>
+      <div class="nav-item" onclick="selectCategory('Dubbed', this)">DUBBED</div>
+      <div class="nav-item" onclick="selectCategory('Trailer', this)">OTHERS</div>
+      <div class="nav-item" onclick="selectCategory('HDRip', this)">QUALITY</div>
+    </div>
+
+    <!-- HOME GRID VIEW -->
+    <div id="homeView">
+      <div class="section-bar" id="sectionTitle">Featured Movies Free</div>
+      <div class="movie-grid" id="movieGrid">
+        <div style="grid-column: span 2; text-align:center; padding:40px; color:#888;">Loading movies...</div>
+      </div>
+    </div>
+
+    <!-- MOVIE DETAIL VIEW -->
+    <div id="detailView">
+      <div class="detail-header">
+        <span id="detHeaderTitle">Movie Title</span>
+        <button class="back-btn" onclick="showHome()">← Back</button>
+      </div>
+      <div class="detail-body">
+        <div class="detail-poster-box">
+          <img id="detPoster" src="" alt="Movie Poster">
+        </div>
+
+        <div class="info-heading" id="detInfoHeading">MOVIE INFORMATION</div>
+
+        <ul class="meta-list">
+          <li>Directed by: <span class="val" id="detDirector">N/A</span></li>
+          <li>Written by: <span class="val" id="detWriter">N/A</span></li>
+          <li>Starring by: <span class="val" id="detStarring">N/A</span></li>
+          <li>Genres: <span class="val" id="detGenres">Drama, Action</span></li>
+          <li>Categories: <span class="val" id="detCategories">Telugu Featured, Telugu Movies 2026</span></li>
+          <li>Country: <span class="val" id="detCountry">India</span></li>
+          <li>Language: <span class="val" id="detLanguage">Telugu</span></li>
+          <li>Quality: <span class="val" id="detQuality">HDRip</span></li>
+        </ul>
+
+        <div class="synopsis-box">
+          <div class="synopsis-title">SYNOPSIS</div>
+          <div class="synopsis-text" id="detSynopsis"></div>
+        </div>
+
+        <div class="player-tabs">
+          <div class="player-tab active" id="tabPlayer1" onclick="switchPlayer(1)">Player 1</div>
+          <div class="player-tab" id="tabPlayer2" onclick="switchPlayer(2)">Player 2</div>
+        </div>
+
+        <div class="player-stage">
+          <div class="poster-play-cover" id="posterCover" onclick="startVideoPlayback()">
+            <img id="detPlayerPoster" src="" alt="Play Movie">
+            <div class="big-play-overlay">
+              <div class="big-play-triangle"></div>
+            </div>
+          </div>
+          <div class="iframe-wrap" id="iframeWrap">
+            <iframe id="videoIframe" src="" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAkexz2MU9ndsby4KHOdz5de1SjkQ1-uSY",
+      authDomain: "watchteluguott-8c93c.firebaseapp.com",
+      projectId: "watchteluguott-8c93c",
+      storageBucket: "watchteluguott-8c93c.firebasestorage.app",
+      messagingSenderId: "351511803378",
+      appId: "1:351511803378:web:8eb97be6aebc194b790d9d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let allMovies = [];
+    let currentCategory = "ALL";
+    let activeMovie = null;
+
+    function extractYoutubeId(raw) {
+      if (!raw) return "";
+      const s = raw.trim();
+      const m = s.match(/(?:youtu\\.be\\/|youtube\\.com\\/(?:embed\\/|v\\/|watch\\?v=|shorts\\/|watch\\?.+&v=))([\\w-]{11})/);
+      if (m && m[1]) return m[1];
+      if (/^[\\w-]{11}$/.test(s)) return s;
+      return s;
+    }
+
+    function formatDisplayTitle(m) {
+      const title = m.title || "Untitled";
+      const year = m.year || "2026";
+      const qual = m.quality || "HDRip";
+      const lang = m.language || "Telugu";
+      if (title.includes("(") && title.includes("[")) return title;
+      return `${title} (${year}) ${qual} [${lang}]`;
+    }
+
+    function getPosterUrl(m) {
+      if (m.poster && m.poster.trim() !== "") return m.poster;
+      if (m.posterUrl && m.posterUrl.trim() !== "") return m.posterUrl;
+      const ytId = extractYoutubeId(m.youtubeId || m.videoUrl || "");
+      if (ytId) return `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+      return "https://via.placeholder.com/300x450/111111/666666?text=No+Poster";
+    }
+
+    onSnapshot(collection(db, "movies"), (snap) => {
+      const list = [];
+      snap.forEach((doc) => {
+        list.push({ id: doc.id, ...doc.data() });
+      });
+      list.sort((a, b) => {
+        const ta = a.createdAt?.seconds || 0;
+        const tb = b.createdAt?.seconds || 0;
+        return tb - ta;
+      });
+      allMovies = list;
+      renderGrid();
+    });
+
+    window.renderGrid = function() {
+      const grid = document.getElementById("movieGrid");
+      const q = (document.getElementById("searchInput").value || "").toLowerCase().trim();
+
+      const filtered = allMovies.filter((m) => {
+        const hay = `${m.title || ""} ${m.category || ""} ${m.language || ""} ${m.quality || ""} ${m.platform || ""} ${m.starring || ""}`.toLowerCase();
+        const matchQ = !q || hay.includes(q);
+        const matchCat = currentCategory === "ALL" || hay.includes(currentCategory.toLowerCase());
+        return matchQ && matchCat;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div style="grid-column: span 2; text-align:center; padding:40px; color:#777;">No movies found.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map((m) => {
+        const poster = getPosterUrl(m);
+        const dispTitle = formatDisplayTitle(m);
+        return `
+          <div class="movie-card" onclick="openMovieDetail('${m.id}')">
+            <div class="poster-wrap">
+              <img src="${poster}" alt="${m.title || 'Poster'}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x450/111/777?text=Movie'">
+            </div>
+            <div class="card-title">${dispTitle}</div>
+          </div>
+        `;
+      }).join("");
+    };
+
+    window.filterMovies = function() {
+      showHome(false);
+      renderGrid();
+    };
+
+    window.selectCategory = function(cat, el) {
+      currentCategory = cat;
+      document.querySelectorAll(".nav-item").forEach(i => i.classList.remove("active"));
+      if (el) el.classList.add("active");
+      document.getElementById("sectionTitle").innerText = cat === "ALL" ? "Featured Movies Free" : `${cat} Movies Free`;
+      showHome(false);
+      renderGrid();
+    };
+
+    window.openMovieDetail = function(id) {
+      const m = allMovies.find(x => x.id === id);
+      if (!m) return;
+      activeMovie = m;
+
+      const dispTitle = formatDisplayTitle(m);
+      const poster = getPosterUrl(m);
+      const cleanName = (m.title || "MOVIE").replace(/\\s*\\([^)]*\\)/g, "").toUpperCase();
+
+      document.getElementById("detHeaderTitle").innerText = dispTitle;
+      document.getElementById("detPoster").src = poster;
+      document.getElementById("detPlayerPoster").src = poster;
+      document.getElementById("detInfoHeading").innerText = `${cleanName} MOVIE INFORMATION`;
+
+      document.getElementById("detDirector").innerText = m.director || "M.S. Raju / Official";
+      document.getElementById("detWriter").innerText = m.writer || m.director || "Official Team";
+      document.getElementById("detStarring").innerText = m.starring || "Telugu Lead Cast";
+      document.getElementById("detGenres").innerText = m.genres || "Drama, Action, Thriller";
+      document.getElementById("detCategories").innerText = m.category ? `${m.category}, Telugu Movies 2026` : "Telugu Featured, Telugu Movies 2026";
+      document.getElementById("detCountry").innerText = m.country || "India";
+      document.getElementById("detLanguage").innerText = m.language || "Telugu";
+      document.getElementById("detQuality").innerText = m.quality || "HDRip";
+      document.getElementById("detSynopsis").innerText = m.description || m.desc || `${m.title} is a latest Indian Telugu film featuring an engaging storyline and dramatic performances.`;
+
+      // Reset player state to poster cover with big orange play icon
+      document.getElementById("posterCover").style.display = "block";
+      document.getElementById("iframeWrap").style.display = "none";
+      document.getElementById("videoIframe").src = "";
+
+      document.getElementById("homeView").style.display = "none";
+      document.getElementById("detailView").style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    window.startVideoPlayback = function(playerNum = 1) {
+      if (!activeMovie) return;
+      const rawYt = (playerNum === 2 && activeMovie.player2Url) ? activeMovie.player2Url : (activeMovie.youtubeId || activeMovie.videoUrl || "");
+      const ytId = extractYoutubeId(rawYt);
+
+      document.getElementById("posterCover").style.display = "none";
+      const wrap = document.getElementById("iframeWrap");
+      const ifr = document.getElementById("videoIframe");
+      wrap.style.display = "block";
+
+      if (ytId && ytId.length === 11) {
+        ifr.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1`;
+      } else if (rawYt.startsWith("http")) {
+        ifr.src = rawYt;
+      } else {
+        alert("Video / Trailer link not added for this movie yet.");
+      }
+    };
+
+    window.switchPlayer = function(num) {
+      document.getElementById("tabPlayer1").classList.toggle("active", num === 1);
+      document.getElementById("tabPlayer2").classList.toggle("active", num === 2);
+      startVideoPlayback(num);
+    };
+
+    window.showHome = function(scrollTop = true) {
+      document.getElementById("videoIframe").src = "";
+      document.getElementById("detailView").style.display = "none";
+      document.getElementById("homeView").style.display = "block";
+      if (scrollTop) window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+  </script>
+</body>
+</html>
+"""
+
+with open("public/index.html", "w", encoding="utf-8") as f:
+    f.write(index_html)
+
+print("✔ Updated public/index.html to exact MovieRulz dark grid + detail layout!")
+with open("public/index.html", "r", encoding="utf-8") as f:
+    text = f.read()
+
+target = 'cardsHtml += `'
+pos = text.find(target)
+
+if pos != -1 and "const poster =" not in text:
+    end_pos = text.find("`;", pos)
+    if end_pos != -1:
+        new_layout = """const poster = data.poster || ('https://placehold.co/150x220/1e293b/f59e0b?text=' + encodeURIComponent(title.slice(0, 10)));
+
+        cardsHtml += `
+          <div style="background:#131c2e; border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px; margin-bottom:14px; box-shadow:0 4px 12px rgba(0,0,0,0.35);">
+            <div style="display:flex; gap:14px; align-items:flex-start;">
+              <img src="${poster}" alt="${title}" style="width:75px; height:105px; object-fit:cover; border-radius:8px; flex-shrink:0; border:1px solid rgba(255,255,255,0.1); background:#0f172a;" onerror="this.src='https://placehold.co/150x220/1e293b/f59e0b?text=WatchTelugu'" />
+              <div style="flex:1; min-width:0;">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:6px;">
+                  <span style="background:#0284c7; color:#fff; font-size:10px; font-weight:700; padding:3px 8px; border-radius:4px;">${platform}</span>
+                  <span style="color:#f59e0b; font-size:11px; font-weight:700;">📅 ${releaseDate}</span>
+                </div>
+                <h4 style="color:#fff; font-size:15px; margin:0 0 6px 0; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${title}</h4>
+                <p style="color:#cbd5e1; font-size:12px; line-height:1.5; margin:0; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;">${content}</p>
+              </div>
+            </div>
+            ${keywordsHtml}
+          </div>`"""
+        
+        text = text[:pos] + new_layout + text[end_pos + 2:]
+        with open("public/index.html", "w", encoding="utf-8") as f:
+            f.write(text)
+        print("Successfully updated index.html with poster UI!")
+else:
+    print("Already updated or target not found.")

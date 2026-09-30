@@ -1,0 +1,23 @@
+{
+  "name": "WatchTeluguOTT",
+  "short_name": "WatchTeluguOTT",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0c0e14",
+  "theme_color": "#ffaa00",
+  "description": "Telugu Movies, Trailers, Comedy and Songs OTT Guide",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

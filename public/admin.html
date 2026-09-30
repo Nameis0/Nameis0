@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — MovieRulz Engine</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: Arial, sans-serif;
+      padding: 16px;
+    }
+    .wrap {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    h2 {
+      font-size: 18px;
+      color: #f59e0b;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 6px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: bold;
+      color: #94a3b8;
+      margin-top: 10px;
+      margin-bottom: 4px;
+    }
+    input, select, textarea {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid #475569;
+      color: #fff;
+      padding: 9px;
+      border-radius: 6px;
+      font-size: 13px;
+      outline: none;
+    }
+    input:focus, textarea:focus {
+      border-color: #f59e0b;
+    }
+    .btn {
+      background: #f59e0b;
+      color: #0f172a;
+      font-weight: bold;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 12px;
+      width: 100%;
+    }
+    .btn-fetch {
+      background: #3b82f6;
+      color: #fff;
+    }
+    .btn-cancel {
+      background: #64748b;
+      color: #fff;
+      display: none;
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+    .row > div {
+      flex: 1;
+    }
+    .movie-item {
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .actions {
+      display: flex;
+      gap: 6px;
+    }
+    .edit-btn {
+      background: #0284c7;
+      color: #fff;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .del-btn {
+      background: #ef4444;
+      color: #fff;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .edit-badge {
+      display: inline-block;
+      background: #0284c7;
+      color: #fff;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+      display: none;
+    }
+  
+  .admin-nav-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .admin-tab-btn {
+    flex: 1;
+    padding: 12px;
+    background: #1e293b;
+    border: 2px solid #334155;
+    border-radius: 8px;
+    color: #94a3b8;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+  }
+  .admin-tab-btn.active {
+    background: #f59e0b;
+    color: #000;
+    border-color: #f59e0b;
+  }
+  .retro-panel-card {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #334155;
+    display: none;
+  }
+  .yt-preview-box {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #000;
+    margin-top: 12px;
+    margin-bottom: 15px;
+    display: none;
+  }
+  .yt-preview-box iframe {
+    position: absolute;
+    top:0; left:0; width:100%; height:100%; border:none;
+  }
+</style>
+
+</head>
+<body>
+
+
+<div class="wrap">
+  
+  <div class="admin-nav-tabs">
+    <div class="admin-tab-btn active" id="tabRegBtn" onclick="switchAdminTab('regular')">🎬 Regular Movies</div>
+    <div class="admin-tab-btn" id="tabRetroBtn" onclick="switchAdminTab('retro')">📻 Retro YouTube Hub</div>
+    <div class="admin-tab-btn" id="tabOttUpdatesBtn" onclick="switchAdminTab('ott_updates')">📢 OTT Updates Hub</div>
+  </div>
+
+  <!-- RETRO UPLOADER PANEL -->
+  <!-- OTT UPDATES PANEL -->
+  <div id="ottUpdatesPanel" class="retro-panel-card" style="display:none; background:#111827; border:1px solid #1f2937; border-radius:12px; padding:20px; margin-bottom:24px;">
+    <h2 style="color:#f59e0b; font-size:18px; margin-bottom:14px;">📢 Publish Telugu OTT Releases & Keyword Updates</h2>
+    
+    <div class="form-group" style="margin-bottom:14px;">
+      <label style="color:#94a3b8; font-size:12px; font-weight:700;">Movie / Show Title:</label>
+      <input type="text" id="ottUpTitle" placeholder="e.g. Devara, Game Changer, Kalki 2898 AD" style="width:100%; background:#1f2937; border:1px solid #374151; color:#fff; padding:10px; border-radius:6px; margin-top:4px;">
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;">
+      <div class="form-group">
+        <label style="color:#94a3b8; font-size:12px; font-weight:700;">Streaming Platform:</label>
+        <input type="text" id="ottUpPlatform" placeholder="e.g. Aha / Amazon Prime / Netflix / Zee5" style="width:100%; background:#1f2937; border:1px solid #374151; color:#fff; padding:10px; border-radius:6px; margin-top:4px;">
+      </div>
+      <div class="form-group">
+        <label style="color:#94a3b8; font-size:12px; font-weight:700;">OTT Release Date:</label>
+        <input type="text" id="ottUpDate" placeholder="e.g. Oct 10, 2026 / Streaming Now" style="width:100%; background:#1f2937; border:1px solid #374151; color:#fff; padding:10px; border-radius:6px; margin-top:4px;">
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:14px;">
+      <label style="color:#94a3b8; font-size:12px; font-weight:700;">Update Details / Description (For SEO & Readers):</label>
+      <textarea id="ottUpContent" rows="3" placeholder="Movie streaming updates, digital premiere details, official audio languages info..." style="width:100%; background:#1f2937; border:1px solid #374151; color:#fff; padding:10px; border-radius:6px; margin-top:4px; resize:vertical;"></textarea>
+    </div>
+
+    <div class="form-group" style="margin-bottom:16px;">
+      <label style="color:#94a3b8; font-size:12px; font-weight:700;">Google Search Keywords (Comma-separated):</label>
+      <input type="text" id="ottUpKeywords" placeholder="e.g. Kalki OTT release date, Aha Telugu new movies, Prime Video Telugu" style="width:100%; background:#1f2937; border:1px solid #374151; color:#fff; padding:10px; border-radius:6px; margin-top:4px;">
+    </div>
+
+    <button type="button" onclick="submitOttUpdate()" style="background:#f59e0b; color:#000; font-weight:800; border:none; padding:12px 24px; border-radius:6px; cursor:pointer; width:100%; font-size:14px;">🚀 Publish Update to Live Site</button>
+  </div>
+<div id="retroPanel" class="retro-panel-card">
+    <h2 style="color:#f59e0b; font-size:18px; margin-bottom:12px;">📻 Retro YouTube Feed Uploader</h2>
+    <p style="font-size:13px; color:#94a3b8; margin-bottom:15px;">YouTube video link paste cheyagane live player vasthundi, chusi confirm chesukuni direct ga upload cheyavachu.</p>
+    
+    <label style="display:block; margin-bottom:5px; font-weight:bold;">Retro Category:</label>
+    <select id="retroCategory" style="width:100%; padding:10px; border-radius:6px; background:#0f172a; color:#fff; border:1px solid #475569; margin-bottom:15px;">
+      <option value="classics">🎬 Classic Movies</option>
+      <option value="music">🎵 Retro Melodies & Songs (Music)</option>
+      <option value="comedy">🎭 Retro Cult Comedy Scenes (Comedy)</option>
+    </select>
+
+    <!-- IN-PANEL YOUTUBE SEARCH ENGINE -->
+    <label style="display:block; margin-bottom:5px; font-weight:bold; color:#38bdf8;">🔍 Search YouTube Videos Directly:</label>
+    <div style="display:flex; gap:8px; margin-bottom:12px;">
+      <input type="text" id="ytSearchQuery" placeholder="e.g. Brahmanandam Ali comedy, SPB hits, Old Telugu Movie..." style="flex:1; padding:10px; border-radius:6px; background:#0f172a; color:#fff; border:1px solid #38bdf8;">
+      <button type="button" onclick="searchYouTubeVideos()" style="background:#0284c7; color:#fff; font-weight:bold; border:none; padding:10px 16px; border-radius:6px; cursor:pointer;">Search</button>
+    </div>
+
+    <!-- YouTube Search Results Horizontal / Grid Scroller -->
+    <div id="ytSearchResults" style="display:none; max-height:280px; overflow-y:auto; background:#0f172a; border:1px solid #334155; border-radius:8px; padding:10px; margin-bottom:15px;">
+    </div>
+
+    <label style="display:block; margin-bottom:5px; font-weight:bold;">Selected YouTube Video URL or ID:</label>
+    <input type="text" id="retroYtUrl" placeholder="Auto-filled on select or paste URL..." style="width:100%; padding:10px; border-radius:6px; background:#0f172a; color:#fff; border:1px solid #475569; margin-bottom:10px;" oninput="onRetroUrlChange()">
+    
+    <!-- Live Video Player for Confirmation -->
+    <div id="retroPreviewBox" class="yt-preview-box">
+      <iframe id="retroIframe" src="" allowfullscreen allow="autoplay"></iframe>
+    </div>
+
+    <label style="display:block; margin-bottom:5px; font-weight:bold;">Title:</label>
+    <input type="text" id="retroTitle" placeholder="e.g. Brahmanandam Epic Comedy Scene" style="width:100%; padding:10px; border-radius:6px; background:#0f172a; color:#fff; border:1px solid #475569; margin-bottom:12px;">
+
+    <label style="display:block; margin-bottom:5px; font-weight:bold;">Year / Era:</label>
+    <input type="text" id="retroYear" value="2000s" placeholder="e.g. 1995 or Retro" style="width:100%; padding:10px; border-radius:6px; background:#0f172a; color:#fff; border:1px solid #475569; margin-bottom:15px;">
+
+    <button type="button" id="saveRetroBtn" onclick="saveRetroMovie()" style="width:100%; background:#f59e0b; color:#000; font-weight:bold; font-size:16px; padding:12px; border:none; border-radius:8px; cursor:pointer;">
+      ✅ Confirm & Publish to Retro Feed
+    </button>
+  </div>
+
+  <div id="adminContent">
+    <div class="card">
+      <h2>⚡ Smart Auto-Fetch Engine</h2>
+      <label>Movie Name (Telugu / Indian Movie / OTT Release):</label>
+      <div style="display:flex; gap:8px;">
+        <input type="text" id="fetchQuery" placeholder="e.g. Romanchakam, Sardar 2, Agadha, Peddi">
+        <button type="button" class="btn btn-fetch" style="margin-top:0; width:auto; white-space:nowrap;" onclick="autoFetchMovieDetails()">Fetch Details</button>
+      </div>
+      <div id="fetchStatus" style="font-size:12px; color:#38bdf8; margin-top:6px;"></div>
+    </div>
+
+    <div class="card">
+      <h2>
+        Movie Metadata &amp; OTT Links 
+        <span id="editModeBadge" class="edit-badge">Editing Mode</span>
+      </h2>
+      <div id="regularPanel"><form id="movieForm">
+        <input type="hidden" id="editingDocId" value="">
+
+        <label>Movie Title:</label>
+        <input type="text" id="title" required placeholder="Movie Name">
+
+        <div class="row">
+          <div>
+            <label>Year:</label>
+            <input type="text" id="year" value="2026">
+          </div>
+          <div>
+            <label>Language:</label>
+            <input type="text" id="language" value="Telugu">
+          </div>
+          <div>
+            <label>Quality:</label>
+            <input type="text" id="quality" value="HDRip">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Category:</label>
+            <select id="category">
+              <option value="Telugu">Telugu</option>
+              <optgroup label="--- Retro Special ---">
+                <option value="classics">🎬 Classic Movies</option>
+                <option value="music">🎵 Retro Songs (Melodies)</option>
+                <option value="comedy">🎭 Retro Comedy Scenes</option>
+              </optgroup>
+              <option value="Featured">Featured</option>
+              <option value="Bollywood">Bollywood</option>
+              <option value="Tamil">Tamil</option>
+              <option value="Malayalam">Malayalam</option>
+              <option value="Hollywood">Hollywood</option>
+              <option value="Dubbed">Dubbed</option>
+            </select>
+          </div>
+          <div>
+            <label>Genres:</label>
+            <input type="text" id="genres" placeholder="Drama, Action, Thriller">
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Director:</label>
+            <input type="text" id="director" placeholder="Director Name">
+          </div>
+          <div>
+            <label>Writer:</label>
+            <input type="text" id="writer" placeholder="Writer Name">
+          </div>
+        </div>
+
+        <label>Starring (Cast):</label>
+        <input type="text" id="starring" placeholder="Hero, Heroine, Key Actors">
+
+        <label>Poster Image URL:</label>
+        <input type="text" id="poster" placeholder="Poster image URL">
+
+        <label>Synopsis (Story Description):</label>
+        <textarea id="description" rows="4" placeholder="Movie storyline overview..."></textarea>
+
+        <h2 style="margin-top:16px; font-size:15px; color:#38bdf8;">🎬 Video &amp; OTT Streaming Links</h2>
+
+        <label>YouTube Trailer ID or Link (Player 1):</label>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="youtubeId" placeholder="YouTube Video ID or Full Link">
+          <button type="button" class="btn btn-fetch" style="margin-top:0; width:auto; white-space:nowrap;" onclick="findTrailer()">Find Trailer</button>
+        </div>
+
+        <div class="row">
+          <div>
+            <label>Streaming OTT Platform:</label>
+            <select id="platform" onchange="updateDefaultOttUrl()">
+              <option value="">-- Select OTT Platform --</option>
+              <option value="Aha">Aha</option>
+              <option value="Prime Video">Prime Video</option>
+              <option value="Netflix">Netflix</option>
+              <option value="Zee5">Zee5</option>
+              <option value="JioHotstar">JioHotstar</option>
+              <option value="Sun NXT">Sun NXT</option>
+              <option value="SonyLIV">SonyLIV</option>
+              <option value="ETV Win">ETV Win</option>
+              <option value="Theatre / Coming Soon">Theatre / Coming Soon</option>
+            </select>
+          </div>
+          <div>
+            <label>Direct OTT Watch Link:</label>
+            <input type="text" id="ottUrl" placeholder="Direct Watch URL or Search Link">
+          </div>
+        </div>
+
+        <label>Alternate Stream Link (Player 2 - optional):</label>
+        <input type="text" id="player2Url" placeholder="Direct MP4 / Embed / Stream URL">
+
+        <div style="display:flex; gap:10px;">
+          <button type="submit" id="submitBtn" class="btn">+ Save &amp; Publish Movie</button>
+          <button type="button" id="cancelEditBtn" class="btn btn-cancel" onclick="cancelEditing()">Cancel</button>
+        </div>
+      </form></div>
+    </div>
+
+    <div class="card">
+      <h2>Live Database Movies</h2>
+      <div id="movieList">Loading movies...</div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAkexz2MU9ndsby4KHOdz5de1SjkQ1-uSY",
+    authDomain: "watchteluguott-8c93c.firebaseapp.com",
+    projectId: "watchteluguott-8c93c",
+    storageBucket: "watchteluguott-8c93c.firebasestorage.app",
+    messagingSenderId: "351511803378",
+    appId: "1:351511803378:web:8eb97be6aebc194b790d9d"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app); window.dbInstance = db;
+
+  let cachedMovies = {};
+
+  function cleanText(txt) {
+    if (!txt) return "";
+    return txt.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+              .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+              .replace(/\.mw-parser-output[^{]*\{[^}]*\}/gi, "")
+              .replace(/\[\d+\]/g, "")
+              .replace(/<[^>]+>/g, " ")
+              .replace(/\s+/g, " ")
+              .trim();
+  }
+
+  window.updateDefaultOttUrl = function() {
+    const title = (document.getElementById("title").value || document.getElementById("fetchQuery").value || "").trim();
+    const plat = document.getElementById("platform").value;
+    const ottInput = document.getElementById("ottUrl");
+
+    const platUrls = {
+      "Sun NXT": `https://www.sunnxt.com/search?q=${encodeURIComponent(title)}`,
+      "Prime Video": `https://www.primevideo.com/search/ref=atv_nb_sr?phrase=${encodeURIComponent(title)}`,
+      "Netflix": `https://www.netflix.com/search?q=${encodeURIComponent(title)}`,
+      "Zee5": `https://www.zee5.com/search?q=${encodeURIComponent(title)}`,
+      "Aha": `https://www.aha.video/search?q=${encodeURIComponent(title)}`,
+      "JioHotstar": `https://www.hotstar.com/in/explore?search_query=${encodeURIComponent(title)}`,
+      "SonyLIV": `https://www.sonyliv.com/search/${encodeURIComponent(title)}`,
+      "ETV Win": `https://www.etvwin.com/search?q=${encodeURIComponent(title)}`
+    };
+
+    if (platUrls[plat]) {
+      ottInput.value = platUrls[plat];
+    } else if (!ottInput.value) {
+      ottInput.value = `https://www.google.com/search?q=watch+${encodeURIComponent(title)}+movie+online`;
+    }
+  };
+
+  window.findTrailer = function() {
+    const q = (document.getElementById("title").value || document.getElementById("fetchQuery").value || "").trim();
+    if (!q) {
+      alert("Movie Title enter cheyandi!");
+      return;
+    }
+    window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(q + " telugu official trailer")}`, "_blank");
+  };
+
+  document.getElementById("youtubeId").addEventListener("input", (e) => {
+    const val = e.target.value.trim();
+    const m = val.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|shorts\/|watch\?.+&v=))([\w-]{11})/);
+    if (m && m[1]) {
+      e.target.value = m[1];
+    }
+  });
+
+  window.autoFetchMovieDetails = async function() {
+    let rawQ = document.getElementById("fetchQuery").value.trim();
+    const st = document.getElementById("fetchStatus");
+    if (!rawQ) {
+      alert("Movie name enter cheyandi!");
+      return;
+    }
+
+    let cleanQ = rawQ.replace(/\b(telugu|tamil|malayalam|hindi|movie|film)\b/gi, "").replace(/[()]/g, "").trim();
+    if (!cleanQ) cleanQ = rawQ;
+
+    st.innerText = `Fetching clean metadata for "${cleanQ}"...`;
+
+    try {
+      const sUrl = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(cleanQ + " film")}&format=json&origin=*`;
+      const sRes = await fetch(sUrl);
+      const sData = await sRes.json();
+
+      let targetTitle = "";
+      if (sData?.query?.search?.length > 0) {
+        for (const item of sData.query.search) {
+          const t = item.title.toLowerCase();
+          if (!t.startsWith("list of") && !t.includes("soundtrack") && (t.includes("film") || t.includes(cleanQ.toLowerCase()))) {
+            targetTitle = item.title;
+            break;
+          }
+        }
+      }
+      if (!targetTitle) targetTitle = `${cleanQ} (film)`;
+
+      const sumUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(targetTitle)}`;
+      const sumRes = await fetch(sumUrl);
+      const sumData = await sumRes.json();
+
+      document.getElementById("title").value = cleanQ;
+
+      if (sumData.thumbnail?.source || sumData.originalimage?.source) {
+        document.getElementById("poster").value = sumData.originalimage?.source || sumData.thumbnail?.source;
+      }
+
+      if (sumData.extract) {
+        document.getElementById("description").value = sumData.extract;
+      }
+
+      const parseUrl = `https://en.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(targetTitle)}&prop=text&format=json&origin=*`;
+      const pRes = await fetch(parseUrl);
+      const pData = await pRes.json();
+
+      if (pData?.parse?.text) {
+        const fullHtml = pData.parse.text["*"];
+        const docParsed = new DOMParser().parseFromString(fullHtml, "text/html");
+
+        docParsed.querySelectorAll("style, script, noscript").forEach(el => el.remove());
+
+        const infobox = docParsed.querySelector(".infobox");
+        if (infobox) {
+          const rows = infobox.querySelectorAll("tr");
+          rows.forEach(tr => {
+            const th = tr.querySelector("th");
+            const td = tr.querySelector("td");
+            if (!th || !td) return;
+            const l = th.innerText.toLowerCase();
+
+            if (l.includes("directed by")) {
+              const dir = cleanText(td.innerHTML);
+              document.getElementById("director").value = dir;
+              if (!document.getElementById("writer").value) {
+                document.getElementById("writer").value = dir;
+              }
+            }
+            if (l.includes("written by") || l.includes("screenplay by") || l.includes("story by")) {
+              const wr = cleanText(td.innerHTML);
+              document.getElementById("writer").value = wr.split(",")[0].trim();
+            }
+            if (l.includes("starring")) {
+              const rawList = Array.from(td.querySelectorAll("li, a"))
+                .map(el => cleanText(el.innerText))
+                .filter(t => t.length > 2 && !t.toLowerCase().includes("output"));
+              
+              const uniqueCast = [];
+              for (const name of rawList) {
+                if (!uniqueCast.some(u => u.toLowerCase() === name.toLowerCase())) {
+                  uniqueCast.push(name);
+                }
+              }
+              document.getElementById("starring").value = uniqueCast.slice(0, 5).join(", ") || cleanText(td.innerHTML);
+            }
+            if (l.includes("release date")) {
+              const mYear = td.innerText.match(/\b(20\d\d)\b/);
+              if (mYear) document.getElementById("year").value = mYear[1];
+            }
+            if (l.includes("language")) {
+              document.getElementById("language").value = cleanText(td.innerText).split(",")[0].trim() || "Telugu";
+            }
+          });
+        }
+
+        let releaseContext = "";
+        if (infobox) releaseContext += infobox.innerText.toLowerCase();
+        const releaseHead = Array.from(docParsed.querySelectorAll("h2, h3")).find(h => h.innerText.toLowerCase().includes("release") || h.innerText.toLowerCase().includes("distribution"));
+        if (releaseHead) {
+          let curr = releaseHead.nextElementSibling;
+          while (curr && !curr.tagName.startsWith("H")) {
+            releaseContext += " " + curr.innerText.toLowerCase();
+            curr = curr.nextElementSibling;
+          }
+        }
+
+        let detected = "";
+        if (releaseContext.includes("aha")) detected = "Aha";
+        else if (releaseContext.includes("prime video") || releaseContext.includes("amazon prime")) detected = "Prime Video";
+        else if (releaseContext.includes("netflix")) detected = "Netflix";
+        else if (releaseContext.includes("zee5") || releaseContext.includes("zee 5")) detected = "Zee5";
+        else if (releaseContext.includes("hotstar") || releaseContext.includes("jiohotstar")) detected = "JioHotstar";
+        else if (releaseContext.includes("sun nxt")) detected = "Sun NXT";
+        else if (releaseContext.includes("sonyliv") || releaseContext.includes("sony liv")) detected = "SonyLIV";
+        else if (releaseContext.includes("etv win")) detected = "ETV Win";
+
+        document.getElementById("platform").value = detected;
+      }
+
+      updateDefaultOttUrl();
+      document.getElementById("genres").value = "Drama, Action, Thriller";
+      document.getElementById("quality").value = "HDRip";
+
+      st.innerText = "✔ Success: Metadata Auto-Fetched!";
+    } catch (err) {
+      console.error(err);
+      st.innerText = "Fetch error: " + err.message;
+    }
+  };
+
+  // EDIT MOVIE HANDLER
+  window.editMovie = function(id) {
+    const data = cachedMovies[id];
+    if (!data) return;
+
+    document.getElementById("editingDocId").value = id;
+    document.getElementById("title").value = data.title || "";
+    document.getElementById("year").value = data.year || "2026";
+    document.getElementById("language").value = data.language || "Telugu";
+    document.getElementById("quality").value = data.quality || "HDRip";
+    document.getElementById("category").value = data.category || "Telugu";
+    document.getElementById("genres").value = data.genres || "";
+    document.getElementById("director").value = data.director || "";
+    document.getElementById("writer").value = data.writer || "";
+    document.getElementById("starring").value = data.starring || "";
+    document.getElementById("poster").value = data.poster || "";
+    document.getElementById("description").value = data.description || "";
+    document.getElementById("youtubeId").value = data.youtubeId || "";
+    document.getElementById("platform").value = data.platform || "";
+    document.getElementById("ottUrl").value = data.ottUrl || "";
+    document.getElementById("player2Url").value = data.player2Url || "";
+
+    // Switch UI to Edit Mode
+    document.getElementById("submitBtn").innerText = "✔ Update & Save Movie";
+    document.getElementById("submitBtn").style.background = "#0284c7";
+    document.getElementById("submitBtn").style.color = "#fff";
+    document.getElementById("cancelEditBtn").style.display = "block";
+    document.getElementById("editModeBadge").style.display = "inline-block";
+
+    // Smooth scroll to top form
+    window.scrollTo({ top: 120, behavior: "smooth" });
+  };
+
+  window.cancelEditing = function() {
+    document.getElementById("editingDocId").value = "";
+    document.getElementById("movieForm").reset();
+    document.getElementById("submitBtn").innerText = "+ Save & Publish Movie";
+    document.getElementById("submitBtn").style.background = "#f59e0b";
+    document.getElementById("submitBtn").style.color = "#0f172a";
+    document.getElementById("cancelEditBtn").style.display = "none";
+    document.getElementById("editModeBadge").style.display = "none";
+  };
+
+  document.getElementById("movieForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const editId = document.getElementById("editingDocId").value;
+    const title = document.getElementById("title").value.trim();
+    const year = document.getElementById("year").value.trim();
+    const language = document.getElementById("language").value.trim();
+    const quality = document.getElementById("quality").value.trim();
+    const category = document.getElementById("category").value;
+    const genres = document.getElementById("genres").value.trim();
+    const director = document.getElementById("director").value.trim();
+    const writer = document.getElementById("writer").value.trim();
+    const starring = document.getElementById("starring").value.trim();
+    const poster = document.getElementById("poster").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const youtubeId = document.getElementById("youtubeId").value.trim();
+    const platform = document.getElementById("platform").value;
+    const ottUrl = document.getElementById("ottUrl").value.trim();
+    const player2Url = document.getElementById("player2Url").value.trim();
+
+    const moviePayload = {
+      title,
+      year,
+      language,
+      quality,
+      category,
+      genres,
+      director,
+      writer,
+      starring,
+      poster,
+      description,
+      youtubeId,
+      platform,
+      ottUrl,
+      player2Url,
+      updatedAt: serverTimestamp()
+    };
+
+    try {
+      if (editId) {
+        // UPDATE EXISTING DOCUMENT
+        await updateDoc(doc(db, "movies", editId), moviePayload);
+        alert(`"${title}" successfully updated!`);
+      } else {
+        // ADD NEW DOCUMENT
+        moviePayload.createdAt = serverTimestamp();
+        await addDoc(collection(db, "movies"), moviePayload);
+        alert(`"${title}" saved and published to site!`);
+      }
+      cancelEditing();
+      document.getElementById("fetchStatus").innerText = "";
+    } catch (err) {
+      alert("Save/Update error: " + err.message);
+    }
+  });
+
+  onSnapshot(collection(db, "movies"), (snap) => {
+    const list = document.getElementById("movieList");
+    let html = "";
+    cachedMovies = {};
+
+    snap.forEach((d) => {
+      const data = d.data();
+      cachedMovies[d.id] = data;
+      html += `
+        <div class="movie-item">
+          <div>
+            <strong>${data.title || "Untitled"}</strong> (${data.year || "2026"}) - <span style="color:#38bdf8;">${data.platform || "OTT"}</span>
+          </div>
+          <div class="actions">
+            <button class="edit-btn" onclick="editMovie('${d.id}')">Edit</button>
+            <button class="del-btn" onclick="deleteMovie('${d.id}')">Delete</button>
+          </div>
+        </div>
+      `;
+    });
+    list.innerHTML = html || "No movies in database yet.";
+  });
+
+  window.deleteMovie = async function(id) {
+    const item = cachedMovies[id];
+    const name = item?.title || "ee movie";
+    if (confirm(`"${name}" ని నిజంగానే డిలీట్ చేయాలా?`)) {
+      await deleteDoc(doc(db, "movies", id));
+      if (document.getElementById("editingDocId").value === id) {
+        cancelEditing();
+      }
+    }
+  };
+
+  window.submitOttUpdate = async function() {
+    const title = document.getElementById("ottUpTitle").value.trim();
+    const platform = document.getElementById("ottUpPlatform").value.trim();
+    const releaseDate = document.getElementById("ottUpDate").value.trim();
+    const content = document.getElementById("ottUpContent").value.trim();
+    const keywords = document.getElementById("ottUpKeywords").value.trim();
+
+    if (!title || !content) {
+      alert("Movie Title and Details are required!");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "ott_updates"), {
+        title,
+        platform: platform || "Telugu OTT",
+        releaseDate: releaseDate || "Announced",
+        content,
+        keywords: keywords || "",
+        createdAt: serverTimestamp()
+      });
+      alert("✅ OTT Update successfully published!");
+      document.getElementById("ottUpTitle").value = "";
+      document.getElementById("ottUpPlatform").value = "";
+      document.getElementById("ottUpDate").value = "";
+      document.getElementById("ottUpContent").value = "";
+      document.getElementById("ottUpKeywords").value = "";
+    } catch(err) {
+      alert("Error saving update: " + err.message);
+    }
+  };
+
+</script>
+
+<script>
+window.autoFillRetro = function() {
+  const urlVal = document.getElementById("retroYtInput").value.trim();
+  const typeVal = document.getElementById("retroType").value;
+  if (!urlVal) {
+    alert("Please enter a YouTube link or ID!");
+    return;
+  }
+
+  // Extract YouTube ID
+  let match = urlVal.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+  let ytId = match ? match[1] : (urlVal.length === 11 ? urlVal : "");
+
+  if (!ytId) {
+    alert("Could not extract valid YouTube ID from URL.");
+    return;
+  }
+
+  // Auto assign fields
+  document.getElementById("youtubeId").value = ytId;
+  document.getElementById("category").value = typeVal;
+  document.getElementById("quality").value = "HD";
+  document.getElementById("language").value = "Telugu";
+
+  // Auto set HD Thumbnail
+  const hqThumb = "https://img.youtube.com/vi/" + ytId + "/hqdefault.jpg";
+  document.getElementById("poster").value = hqThumb;
+
+  // Set default sample placeholders based on type
+  if (typeVal === "classics") {
+    document.getElementById("genres").value = "Classic, Drama, Retro";
+  } else if (typeVal === "music") {
+    document.getElementById("genres").value = "Retro Song, Melody";
+  } else if (typeVal === "comedy") {
+    document.getElementById("genres").value = "Retro Comedy, Scene";
+  }
+
+  alert("✅ Video ID & Poster captured successfully! Now enter Title and Year, then click Save.");
+};
+</script>
+
+
+<script type="module">
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  window.switchAdminTab = function(type) {
+    const regTab = document.getElementById("tabRegBtn");
+    const retroTab = document.getElementById("tabRetroBtn");
+    const ottTab = document.getElementById("tabOttUpdatesBtn");
+    const regPanel = document.getElementById("regularPanel") || document.querySelector(".card") || document.querySelector("form");
+    const retroPanel = document.getElementById("retroPanel");
+    const ottPanel = document.getElementById("ottUpdatesPanel");
+
+    if (regTab) regTab.classList.remove("active");
+    if (retroTab) retroTab.classList.remove("active");
+    if (ottTab) ottTab.classList.remove("active");
+
+    if (type === "ott_updates") {
+      if (ottTab) ottTab.classList.add("active");
+      if (ottPanel) ottPanel.style.display = "block";
+      if (retroPanel) retroPanel.style.display = "none";
+      if (regPanel) regPanel.style.display = "none";
+      return;
+    }
+
+    if (ottPanel) ottPanel.style.display = "none";
+
+    if (type === "regular") {
+      if (ottPanel) ottPanel.style.display = "none";
+      regTab.classList.add("active");
+      retroTab.classList.remove("active");
+      regPanel.style.display = "block";
+      retroPanel.style.display = "none";
+    } else {
+      retroTab.classList.add("active");
+      regTab.classList.remove("active");
+      regPanel.style.display = "none";
+      retroPanel.style.display = "block";
+    }
+  };
+
+  let currentRetroYtId = "";
+
+  window.onRetroUrlChange = function() {
+    const url = document.getElementById("retroYtUrl").value.trim();
+    const box = document.getElementById("retroPreviewBox");
+    const iframe = document.getElementById("retroIframe");
+
+    const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+    const ytId = match ? match[1] : (url.length === 11 ? url : "");
+
+    if (ytId) {
+      currentRetroYtId = ytId;
+      iframe.src = "https://www.youtube.com/embed/" + ytId;
+      box.style.display = "block";
+    } else {
+      currentRetroYtId = "";
+      iframe.src = "";
+      box.style.display = "none";
+    }
+  };
+
+  window.saveRetroMovie = async function() {
+    const title = document.getElementById("retroTitle").value.trim();
+    const category = document.getElementById("retroCategory").value;
+    const year = document.getElementById("retroYear").value.trim() || "Retro";
+
+    if (!currentRetroYtId) {
+      alert("Please enter a valid YouTube Video link!");
+      return;
+    }
+    if (!title) {
+      alert("Please enter a Title for this video!");
+      return;
+    }
+
+    const btn = document.getElementById("saveRetroBtn");
+    btn.disabled = true;
+    btn.innerText = "Publishing...";
+
+    try {
+      const db = window.dbInstance || getFirestore();
+      const payload = {
+        title: title,
+        year: year,
+        category: category,
+        youtubeId: currentRetroYtId,
+        poster: "https://img.youtube.com/vi/" + currentRetroYtId + "/hqdefault.jpg",
+        isRetro: true,
+        language: "Telugu",
+        quality: "HD",
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      };
+
+      await addDoc(collection(db, "movies"), payload);
+      alert("🎉 Successfully added to Retro " + category.toUpperCase() + " feed!");
+
+      document.getElementById("retroYtUrl").value = "";
+      document.getElementById("retroTitle").value = "";
+      document.getElementById("retroPreviewBox").style.display = "none";
+      document.getElementById("retroIframe").src = "";
+      currentRetroYtId = "";
+    } catch (e) {
+      alert("Error saving: " + e.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "✅ Confirm & Publish to Retro Feed";
+    }
+  };
+</script>
+
+
+
+<script>
+const YOUTUBE_API_KEY = "AIzaSyDYQfkbxkjLvn8CDy5gnWA3QuBGAnLgqYQ";
+
+window.searchYouTubeVideos = async function() {
+  const q = document.getElementById("ytSearchQuery").value.trim();
+  const resBox = document.getElementById("ytSearchResults");
+  if (!q) {
+    alert("Please enter a search name!");
+    return;
+  }
+
+  resBox.style.display = "block";
+  resBox.innerHTML = "<div style='color:#38bdf8; text-align:center; padding:15px;'>⏳ Searching YouTube for \"" + q + "\"...</div>";
+
+  try {
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(q)}&type=video&key=${YOUTUBE_API_KEY}`;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data.error) {
+      resBox.innerHTML = `<div style="color:#f87171; padding:10px;">YouTube API Error: ${data.error.message}</div>`;
+      return;
+    }
+
+    const items = data.items || [];
+    if (items.length === 0) {
+      resBox.innerHTML = "<div style='color:#f87171; padding:10px;'>No videos found for this search.</div>";
+      return;
+    }
+
+    let outHtml = "<div style='display:grid; grid-template-columns:1fr; gap:10px;'>";
+    items.forEach(item => {
+      const vId = item.id.videoId;
+      const vTitle = (item.snippet.title || "").replace(/["']/g, "");
+      const thumb = item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url || ("https://img.youtube.com/vi/" + vId + "/hqdefault.jpg");
+      const channel = item.snippet.channelTitle || "";
+
+      outHtml += `
+        <div style="display:flex; gap:10px; background:#1e293b; padding:8px; border-radius:6px; cursor:pointer; align-items:center; border:1px solid #334155;" onclick="selectSearchedYtVideo('${vId}', '${vTitle}')">
+          <img src="${thumb}" style="width:110px; height:65px; object-fit:cover; border-radius:4px; flex-shrink:0;">
+          <div style="overflow:hidden;">
+            <div style="font-weight:bold; font-size:13px; color:#fff; line-height:1.3; margin-bottom:4px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${item.snippet.title}</div>
+            <div style="font-size:11px; color:#94a3b8;">${channel}</div>
+            <div style="font-size:11px; color:#38bdf8; margin-top:2px;">▶ Click to Play & Select</div>
+          </div>
+        </div>
+      `;
+    });
+    outHtml += "</div>";
+    resBox.innerHTML = outHtml;
+  } catch (err) {
+    resBox.innerHTML = "<div style='color:#f87171; padding:10px;'>Search Error: " + err.message + "</div>";
+  }
+};
+
+window.selectSearchedYtVideo = function(vId, vTitle) {
+  document.getElementById("retroYtUrl").value = "https://www.youtube.com/watch?v=" + vId;
+  document.getElementById("retroTitle").value = vTitle;
+  if (typeof window.onRetroUrlChange === "function") {
+    window.onRetroUrlChange();
+  }
+};
+</script>
+
+
+</body>
+</html>

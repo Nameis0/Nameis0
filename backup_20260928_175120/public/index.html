@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KMSGNPN6WN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-KMSGNPN6WN");
+</script>
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+  <meta name="description" content="WatchTeluguOTT - Official guide for Telugu OTT release dates, upcoming movie trailers, and streaming platform updates for Aha, Prime Video, and Netflix.">
+  <meta name="google-site-verification" content="oWO79Vu6pCwNRm1MK0lWcHP9aiON9bjvdSjVmy2n4X4" />
+  <meta name="google-site-verification" content="7Ls6-YOePSGFqYAsBwJhO9gV4765YMelex7HdKBbmIw" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WatchTeluguOTT | Telugu Movies, Trailers & OTT Guide</title>
+  <meta name="description" content="WatchTeluguOTT - Latest Telugu OTT Releases, Upcoming Movies on Prime, Netflix, Aha, Hotstar, ZEE5, Telugu Trailers, Retro Classics & Video Songs Guide.">
+  <meta name="keywords" content="WatchTeluguOTT, Watch Telugu OTT, Telugu OTT releases, new Telugu movies on OTT, Aha, Prime Video Telugu, Telugu trailers">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ott.watchearnpro.online/">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#ffaa00">
+  <link rel="icon" type="image/png" href="/logo.png">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #0c0e14; color: #fff; padding-bottom: 90px; }
+
+    #topPlayerWrap {
+      display: none;
+      background: #11131c;
+      border-bottom: 1px solid #1f2334;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .player-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffaa00;
+    }
+    .player-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 55%;
+    }
+    .player-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .player-ctrl-btn {
+      background: #1e2235;
+      color: #fff;
+      border: 1px solid #2d334d;
+      padding: 5px 9px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-share-icon { color: #00d26a; }
+    .btn-fs-icon { color: #38bdf8; }
+    .player-close-btn {
+      background: #252839;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      background: #000;
+    }
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    #ottDetailBanner {
+      display: none;
+      background: #161826;
+      border-top: 1px solid #23273c;
+      padding: 12px 14px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .ott-info-left {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .ott-label-sub {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #8c93a8;
+      font-weight: 700;
+    }
+    .ott-movie-name {
+      font-size: 13px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .ott-date-tag {
+      font-size: 11px;
+      color: #ffd700;
+      font-weight: 800;
+    }
+    .ott-watch-now-btn {
+      background: #ff3b5f;
+      color: #fff;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 8px 14px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 3px 10px rgba(255, 59, 95, 0.4);
+      border: none;
+      cursor: pointer;
+    }
+
+    .main-wrap { max-width: 650px; margin: 0 auto; padding: 14px 12px; }
+    .site-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .brand-wrap { display: flex; align-items: center; gap: 8px; }
+    .brand-logo-img { width: 34px; height: 34px; border-radius: 8px; object-fit: cover; }
+    
+    .site-brand { 
+      font-size: 20px; 
+      font-weight: 900; 
+      letter-spacing: 0.5px; 
+      color: #ffffff; 
+      line-height: 1; 
+    }
+    .gold-neon {
+      color: #ffd700;
+      text-shadow: 
+        0 0 4px #ffb703,
+        0 0 10px #fb8500,
+        0 0 18px rgba(255, 183, 3, 0.8),
+        0 0 25px rgba(251, 133, 0, 0.6);
+      font-weight: 900;
+    }
+
+    .btn-install {
+      display: none;
+      background: linear-gradient(135deg, #ffaa00, #ff3b5f);
+      color: #fff;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(255, 170, 0, 0.3);
+    }
+
+    .community-box {
+      background: linear-gradient(135deg, #131728 0%, #1e1b2e 100%);
+      border: 1px solid #2f2e46;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .community-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .community-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .community-sub {
+      font-size: 11px;
+      color: #9aa1b5;
+    }
+    .community-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-comm {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-wa-comm { background: #25D366; color: #000; }
+    .btn-tg-comm { background: #0088cc; color: #fff; }
+
+    .hero-slider-wrap {
+      position: relative;
+      width: 100%;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      aspect-ratio: 16/9;
+      background: #151824;
+      border: 1px solid #23273a;
+      display: none;
+    }
+    .hero-slide {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      cursor: pointer;
+    }
+    .hero-slide.active { opacity: 1; z-index: 2; }
+    .hero-slide img { width: 100%; height: 100%; object-fit: cover; }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 35%, rgba(12,14,20,0.95) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 12px;
+    }
+    .hero-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .hero-badge {
+      background: linear-gradient(135deg, #ffd700, #ff8800);
+      color: #000;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 4px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .hero-date-badge {
+      background: rgba(0, 0, 0, 0.75);
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      color: #ffd700;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    .hero-title { font-size: 14px; font-weight: 800; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
+
+    .ott-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 2px 10px;
+      scrollbar-width: none;
+    }
+    .ott-row::-webkit-scrollbar { display: none; }
+    .ott-btn {
+      min-width: 48px;
+      height: 38px;
+      border-radius: 8px;
+      background: #161824;
+      border: 1px solid #23273a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 800;
+      color: #9aa0b4;
+      padding: 0 8px;
+      transition: all 0.2s;
+    }
+    .ott-btn.active {
+      border: 1.5px solid #ffaa00;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(255, 170, 0, 0.35);
+    }
+    .btn-all { color: #fff; font-weight: 900; }
+    .btn-aha { color: #ff5722; font-weight: 900; font-size: 13px; }
+    .btn-prime { color: #00a8e1; font-weight: 800; font-size: 10px; line-height: 1; text-align: center; }
+    .btn-netflix { color: #e50914; font-weight: 900; font-size: 16px; }
+    .btn-hotstar { color: #1f80e0; font-weight: 800; font-size: 14px; }
+    .btn-sun { color: #ff9800; font-weight: 800; font-size: 10px; line-height: 1; text-align: center; }
+    .btn-zee { color: #fff; font-weight: 800; font-size: 13px; }
+
+    .yt-icon-center {
+      display: flex;
+      justify-content: center;
+      margin: 4px 0 14px;
+    }
+    .yt-circle-btn {
+      width: 44px;
+      height: 34px;
+      border-radius: 9px;
+      background: #ff0000;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(255,0,0,0.35);
+    }
+
+    .search-box {
+      width: 100%;
+      background: #12141e;
+      border: 1px solid #1f2334;
+      border-radius: 25px;
+      padding: 12px 18px;
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+      margin-bottom: 14px;
+    }
+    .search-box::placeholder { color: #6b7285; }
+
+    .category-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 14px;
+      scrollbar-width: none;
+    }
+    .category-scroll::-webkit-scrollbar { display: none; }
+    .pill {
+      background: #171926;
+      border: 1px solid #23273c;
+      color: #9aa1b5;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .pill.active {
+      background: #ff3b5f;
+      color: #fff;
+      border-color: #ff3b5f;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .card {
+      background: #131520;
+      border: 1px solid #1f2233;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      position: relative;
+    }
+    .card-thumb-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #000;
+    }
+    .card-thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .card-badge {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: rgba(0, 0, 0, 0.85);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      padding: 3px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .card-date-badge {
+      position: absolute;
+      bottom: 6px;
+      left: 6px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid rgba(255, 215, 0, 0.5);
+      color: #ffd700;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .fav-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(0,0,0,0.65);
+      border: none;
+      color: #fff;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 13px;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .fav-btn.active { color: #ff3b5f; }
+
+    .card-info {
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex-grow: 1;
+    }
+    .card-title {
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      color: #eee;
+    }
+    .card-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      color: #8c93a8;
+      margin-bottom: 4px;
+    }
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 4px;
+    }
+    .card-year { font-size: 11px; color: #6f768a; font-weight: 600; }
+    .card-platform { font-size: 11px; color: #00d26a; font-weight: 700; }
+    .card-platform.prime-color { color: #00a8e1; }
+    .card-platform.netflix-color { color: #e50914; }
+    .card-platform.aha-color { color: #ff5722; }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: #0f111a;
+      border-top: 1px solid #1f2334;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 999;
+      max-width: 650px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: #8c93a8;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    .nav-item.active { color: #ffaa00; }
+    .nav-icon { font-size: 18px; line-height: 1; }
+  
+    /* SEO FAQ Section Styling */
+    .seo-faq-wrap {
+      margin-top: 30px;
+      padding: 16px;
+      background: #12141e;
+      border: 1px solid #1f2334;
+      border-radius: 12px;
+    }
+    .seo-faq-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #ffd700;
+      margin-bottom: 6px;
+    }
+    .seo-faq-desc {
+      font-size: 12px;
+      color: #8c93a8;
+      line-height: 1.4;
+      margin-bottom: 14px;
+    }
+    .faq-item {
+      background: #171926;
+      border: 1px solid #23273c;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #eee;
+    }
+    .faq-item summary {
+      font-weight: 700;
+      color: #ffaa00;
+      cursor: pointer;
+      outline: none;
+    }
+    .faq-item p {
+      margin-top: 8px;
+      color: #b3b9cc;
+      line-height: 1.45;
+      font-size: 11px;
+    }
+
+  </style>
+
+  <!-- Google Rich Snippet Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "WatchTeluguOTT",
+    "alternateName": ["Watch Telugu OTT", "Telugu OTT Guide"],
+    "url": "https://ott.watchearnpro.online/",
+    "description": "Telugu Movies, Latest OTT Releases, Upcoming Trailers and OTT Streaming Guide.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://ott.watchearnpro.online/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+
+  <!-- Google FAQ Rich Snippet Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Where can I watch Telugu movies online on OTT?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can track and find direct streaming links for Telugu movies on WatchTeluguOTT across all leading OTT platforms including Amazon Prime Video, Netflix, aha Video, Disney+ Hotstar, ZEE5, and SunNXT."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where to watch free Telugu full movies and official trailers online?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "WatchTeluguOTT curates official full-length movies, HD teasers, latest theatrical trailers, comedy scenes, and video songs legally hosted on YouTube and free streaming platforms."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How to get latest Telugu movie OTT release dates and upcoming updates?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "WatchTeluguOTT provides real-time updates and an Upcoming on OTT Hero carousel that alerts Telugu cinema fans regarding confirmed digital release dates and streaming partners."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which OTT platform has the best Telugu movie library?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "aha Video focuses exclusively on 100% Telugu content, while Amazon Prime Video, Netflix, and Disney+ Hotstar stream major big-budget Telugu theatrical blockbusters."
+        }
+      }
+    ]
+  }
+  </script>
+
+</head>
+<body>
+
+  <div id="topPlayerWrap">
+    <div class="player-header">
+      <span class="player-title" id="playerTitle">Video Title</span>
+      <div class="player-controls">
+        <button class="player-ctrl-btn btn-fs-icon" onclick="toggleLandscape()" title="Landscape / Fullscreen">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+          </svg>
+        </button>
+
+        <button class="player-ctrl-btn btn-share-icon" onclick="shareCurrentVideo()" title="Share Video">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+        </button>
+
+        <button class="player-close-btn" onclick="closePlayer()">✕ Close</button>
+      </div>
+    </div>
+    
+    <div class="video-container" id="videoBox">
+      <iframe id="videoIframe" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+    </div>
+
+    <div id="ottDetailBanner">
+      <div class="ott-info-left">
+        <span class="ott-label-sub" id="ottSubLabel">Streaming Now On</span>
+        <span class="ott-movie-name" id="ottPlatName">Amazon Prime Video</span>
+        <span class="ott-date-tag" id="ottBannerDate"></span>
+      </div>
+      <a href="#" target="_blank" class="ott-watch-now-btn" id="ottWatchBtn">
+        Watch Movie ↗
+      </a>
+    </div>
+  </div>
+
+  <div class="main-wrap">
+    <div class="site-header">
+      <div class="brand-wrap">
+        <img src="/logo.png" alt="Logo" class="brand-logo-img">
+        <div class="site-brand"><span class="gold-neon">W</span>atch<span class="gold-neon">T</span>elugu<span class="gold-neon">O</span>TT</div>
+      </div>
+      <button id="openJoinBtn" style="background:#1f2538; color:#ffd700; border:1px solid #ffd700; border-radius:20px; padding:6px 12px; font-size:12px; font-weight:bold; cursor:pointer; margin-right:6px;">🔔 Join</button>
+      <button class="btn-install" id="installBtn">📲 Install App</button>
+    </div>
+
+    <!-- Join Community Popup Modal -->
+    <div id="joinModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:99999; justify-content:center; align-items:center;">
+      <div style="background:#131722; border:1px solid #283049; border-radius:14px; width:85%; max-width:320px; padding:20px; text-align:center; box-shadow:0 8px 30px rgba(0,0,0,0.8);">
+        <div style="font-size:16px; font-weight:800; color:#ffd700; margin-bottom:6px;">🔔 Join OTT Alerts</div>
+        <div style="font-size:12px; color:#8c93a8; margin-bottom:16px;">Daily Telugu OTT updates kosam join avvandi</div>
+        <a href="https://whatsapp.com/channel" target="_blank" class="btn-comm btn-wa-comm" style="display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; margin-bottom:10px;">
+          <span>💬</span> Join WhatsApp
+        </a>
+        <a href="https://t.me" target="_blank" class="btn-comm btn-tg-comm" style="display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; margin-bottom:16px;">
+          <span>✈️</span> Join Telegram
+        </a>
+        <button id="closeJoinBtn" style="background:#1f2538; border:1px solid #414a68; color:#fff; padding:6px 18px; border-radius:6px; font-size:12px; cursor:pointer;">Close</button>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        var openB = document.getElementById("openJoinBtn");
+        var closeB = document.getElementById("closeJoinBtn");
+        var modal = document.getElementById("joinModal");
+        if(openB && modal) openB.onclick = function() { modal.style.display = "flex"; };
+        if(closeB && modal) closeB.onclick = function() { modal.style.display = "none"; };
+        if(modal) modal.onclick = function(e) { if(e.target === modal) modal.style.display = "none"; };
+      });
+    </script>
+
+    <div class="hero-slider-wrap" id="heroSliderWrap"></div>
+
+    <div class="ott-row">
+      <div class="ott-btn btn-all active" onclick="setPlatformFilter('ALL', this)">ALL</div>
+      <div class="ott-btn btn-aha" onclick="setPlatformFilter('aha', this)">aha</div>
+      <div class="ott-btn btn-prime" onclick="setPlatformFilter('Prime', this)">prime<br>video</div>
+      <div class="ott-btn btn-netflix" onclick="setPlatformFilter('Netflix', this)">N</div>
+      <div class="ott-btn btn-hotstar" onclick="setPlatformFilter('Hotstar', this)">★</div>
+      <div class="ott-btn btn-sun" onclick="setPlatformFilter('SunNXT', this)">☀️<br>NXT</div>
+      <div class="ott-btn btn-zee" onclick="setPlatformFilter('ZEE5', this)">Z5</div>
+    </div>
+
+    <div class="yt-icon-center">
+      <div class="yt-circle-btn" onclick="setPlatformFilter('YouTube', null)">▶</div>
+    </div>
+
+    <input type="text" id="searchInput" class="search-box" placeholder="Search movies, trailers, songs...">
+
+    <div class="category-scroll">
+      <div class="pill active" onclick="setCatFilter('all', this)">All Content</div>
+      <div class="pill" onclick="setCatFilter('favs', this)">❤️ Saved</div>
+      <div class="pill" onclick="setCatFilter('movie', this)">🎬 Full Movies</div>
+      <div class="pill" onclick="setCatFilter('trailer', this)">🔥 Latest Trailers</div>
+      <div class="pill" onclick="setCatFilter('retro', this)">🎞️ Retro Classics</div>
+      <div class="pill" onclick="setCatFilter('comedy', this)">😄 Comedy Scenes</div>
+      <div class="pill" onclick="setCatFilter('songs', this)">🎵 Video Songs</div>
+    </div>
+
+    <div class="cards-grid" id="cardsGrid">Loading movies & trailers...</div>
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-item active" onclick="navSwitch('all', this)">
+      <span class="nav-icon">🏠</span>
+      <span>Home</span>
+    </button>
+    <button class="nav-item" onclick="navSwitch('movie', this)">
+      <span class="nav-icon">🎬</span>
+      <span>Movies</span>
+    </button>
+    <button class="nav-item" onclick="navSwitch('trailer', this)">
+      <span class="nav-icon">🔥</span>
+      <span>Trailers</span>
+    </button>
+    <button class="nav-item" onclick="navSwitch('favs', this)">
+      <span class="nav-icon">❤️</span>
+      <span>Saved</span>
+    </button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.style.display = 'block';
+    });
+
+    installBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          installBtn.style.display = 'none';
+        }
+        deferredPrompt = null;
+      }
+    });
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAkexz2MU9ndsby4KHOdz5de1SjkQ1-uSY",
+      authDomain: "watchteluguott-8c93c.firebaseapp.com",
+      projectId: "watchteluguott-8c93c",
+      storageBucket: "watchteluguott-8c93c.firebasestorage.app",
+      messagingSenderId: "351511803378",
+      appId: "1:351511803378:web:89cbf81bf67a12d0eca76b",
+      measurementId: "G-NJNP2Z3LX4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let items = [];
+    let selectedPlatform = "ALL";
+    let selectedCategory = "all";
+    let favorites = JSON.parse(localStorage.getItem("wto_favs") || "[]");
+    let currentPlaying = { title: "", ytId: "" };
+
+    const cardsGrid = document.getElementById("cardsGrid");
+    const topPlayerWrap = document.getElementById("topPlayerWrap");
+    const videoIframe = document.getElementById("videoIframe");
+    const playerTitle = document.getElementById("playerTitle");
+    const searchInput = document.getElementById("searchInput");
+    const heroSliderWrap = document.getElementById("heroSliderWrap");
+
+    const ottDetailBanner = document.getElementById("ottDetailBanner");
+    const ottPlatName = document.getElementById("ottPlatName");
+    const ottBannerDate = document.getElementById("ottBannerDate");
+    const ottWatchBtn = document.getElementById("ottWatchBtn");
+
+    window.closePlayer = function() {
+      videoIframe.src = "";
+      topPlayerWrap.style.display = "none";
+      ottDetailBanner.style.display = "none";
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      }
+    };
+
+    window.toggleLandscape = function() {
+      const target = videoIframe;
+      if (!document.fullscreenElement) {
+        if (target.requestFullscreen) {
+          target.requestFullscreen();
+        } else if (target.webkitRequestFullscreen) {
+          target.webkitRequestFullscreen();
+        } else if (target.msRequestFullscreen) {
+          target.msRequestFullscreen();
+        }
+        if (screen.orientation && screen.orientation.lock) {
+          screen.orientation.lock("landscape").catch(() => {});
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    };
+
+    const defaultOttLinks = {
+      "Prime": "https://www.primevideo.com",
+      "Netflix": "https://www.netflix.com",
+      "aha": "https://www.aha.video",
+      "Hotstar": "https://www.hotstar.com",
+      "ZEE5": "https://www.zee5.com",
+      "SunNXT": "https://www.sunnxt.com"
+    };
+
+    window.openPlayerItem = async function(id, ytId, title, platform, directUrl, releaseDate) {
+      currentPlaying = { title, ytId };
+      playerTitle.innerText = title;
+      videoIframe.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`;
+      topPlayerWrap.style.display = "block";
+
+      const plat = platform || "YouTube";
+      if (plat !== "YouTube") {
+        ottPlatName.innerText = `Full Movie on ${plat}`;
+        ottWatchBtn.innerText = `Watch on ${plat} ↗`;
+        ottWatchBtn.href = directUrl || defaultOttLinks[plat] || "https://google.com/search?q=" + encodeURIComponent(title + " " + plat);
+        
+        if (releaseDate) {
+          ottBannerDate.innerText = `📅 Releasing: ${releaseDate}`;
+          ottBannerDate.style.display = "block";
+        } else {
+          ottBannerDate.style.display = "none";
+        }
+
+        if (plat === "Prime") ottWatchBtn.style.background = "#00a8e1";
+        else if (plat === "Netflix") ottWatchBtn.style.background = "#e50914";
+        else if (plat === "aha") ottWatchBtn.style.background = "#ff5722";
+        else ottWatchBtn.style.background = "#ff3b5f";
+
+        ottDetailBanner.style.display = "flex";
+      } else {
+        ottDetailBanner.style.display = "none";
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (id) {
+        try {
+          const itemRef = doc(db, "movies", id);
+          await updateDoc(itemRef, { views: increment(1) });
+          const found = items.find(m => m.id === id);
+          if (found) {
+            found.views = (found.views || 0) + 1;
+            render();
+          }
+        } catch (e) {}
+      }
+    };
+
+    window.shareCurrentVideo = async function() {
+      const shareData = {
+        title: currentPlaying.title || "WatchTeluguOTT",
+        text: `Watch "${currentPlaying.title}" on WatchTeluguOTT 🎬:`,
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+        } catch (err) {}
+      } else {
+        const text = encodeURIComponent(`${shareData.text}\n${shareData.url}`);
+        window.open(`https://api.whatsapp.com/send?text=${text}`, "_blank");
+      }
+    };
+
+    window.toggleFav = function(e, id) {
+      e.stopPropagation();
+      const index = favorites.indexOf(id);
+      if (index > -1) {
+        favorites.splice(index, 1);
+      } else {
+        favorites.push(id);
+      }
+      localStorage.setItem("wto_favs", JSON.stringify(favorites));
+      render();
+    };
+
+    window.setPlatformFilter = function(plat, el) {
+      selectedPlatform = plat;
+      document.querySelectorAll(".ott-btn").forEach(b => b.classList.remove("active"));
+      if (el) el.classList.add("active");
+      render();
+    };
+
+    window.setCatFilter = function(cat, el) {
+      selectedCategory = cat;
+      document.querySelectorAll(".pill").forEach(p => p.classList.remove("active"));
+      if (el) el.classList.add("active");
+      render();
+    };
+
+    window.navSwitch = function(cat, el) {
+      document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+      el.classList.add("active");
+
+      const pillMap = {
+        'all': 'All Content',
+        'movie': '🎬 Full Movies',
+        'trailer': '🔥 Latest Trailers',
+        'favs': '❤️ Saved'
+      };
+      
+      const pills = document.querySelectorAll(".pill");
+      pills.forEach(p => {
+        p.classList.remove("active");
+        if (p.innerText.trim() === pillMap[cat]) {
+          p.classList.add("active");
+        }
+      });
+
+      selectedCategory = cat;
+      render();
+      window.scrollTo({ top: 300, behavior: 'smooth' });
+    };
+
+    searchInput.addEventListener("input", render);
+
+    function initHeroSlider(allItems) {
+      let upcomingList = allItems.filter(item => item.isUpcoming === true);
+      if (upcomingList.length === 0) {
+        upcomingList = allItems.slice(0, 5);
+      } else {
+        upcomingList = upcomingList.slice(0, 5);
+      }
+
+      if (!upcomingList.length) return;
+
+      heroSliderWrap.innerHTML = "";
+      heroSliderWrap.style.display = "block";
+
+      upcomingList.forEach((item, idx) => {
+        const slide = document.createElement("div");
+        slide.className = `hero-slide ${idx === 0 ? 'active' : ''}`;
+        slide.onclick = () => window.openPlayerItem(item.id, item.youtubeId, item.title, item.platform, item.ottUrl, item.releaseDate);
+        
+        const dateBadgeHtml = item.releaseDate ? `<span class="hero-date-badge">📅 ${item.releaseDate}</span>` : '';
+
+        slide.innerHTML = `
+          <img src="https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg">
+          <div class="hero-overlay">
+            <div class="hero-badge-row">
+              <span class="hero-badge">⏳ UPCOMING ON OTT</span>
+              ${dateBadgeHtml}
+            </div>
+            <div class="hero-title">${item.title}</div>
+          </div>
+        `;
+        heroSliderWrap.appendChild(slide);
+      });
+
+      let currentSlide = 0;
+      setInterval(() => {
+        const slideEls = document.querySelectorAll(".hero-slide");
+        if (slideEls.length < 2) return;
+        slideEls[currentSlide].classList.remove("active");
+        currentSlide = (currentSlide + 1) % slideEls.length;
+        slideEls[currentSlide].classList.add("active");
+      }, 4000);
+    }
+
+    function render() {
+      const q = searchInput.value.toLowerCase().trim();
+      cardsGrid.innerHTML = "";
+
+      const filtered = items.filter(item => {
+        const itemPlat = item.platform || "YouTube";
+        const itemCat = (item.category || "trailer").toLowerCase();
+        const itemTitle = (item.title || "").toLowerCase();
+
+        const matchPlatform = (selectedPlatform === "ALL") || (itemPlat.toLowerCase() === selectedPlatform.toLowerCase());
+        const matchCategory = (selectedCategory === "all") || 
+                              (selectedCategory === "favs" && favorites.includes(item.id)) ||
+                              (itemCat === selectedCategory);
+        const matchSearch = !q || itemTitle.includes(q);
+
+        return matchPlatform && matchCategory && matchSearch;
+      });
+
+      if (filtered.length === 0) {
+        cardsGrid.innerHTML = "<p style='color:#777; grid-column:span 2; font-size:13px; text-align:center; padding:30px;'>No items found.</p>";
+        return;
+      }
+
+      filtered.forEach(item => {
+        const ytId = item.youtubeId || "";
+        const platName = item.platform || "YouTube";
+        const catBadge = (platName !== "YouTube") ? platName.toUpperCase() : (item.category || "TRAILER").toUpperCase();
+        const thumb = `https://img.youtube.com/vi/${ytId}/mqdefault.jpg`;
+        const isFav = favorites.includes(item.id);
+        const year = item.year || "2026";
+        const viewsCount = item.views || 0;
+        const releaseDate = item.releaseDate || "";
+
+        let platClass = "";
+        if (platName.toLowerCase() === "prime") platClass = "prime-color";
+        else if (platName.toLowerCase() === "netflix") platClass = "netflix-color";
+        else if (platName.toLowerCase() === "aha") platClass = "aha-color";
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.onclick = () => window.openPlayerItem(item.id, ytId, item.title, platName, item.ottUrl, releaseDate);
+
+        card.innerHTML = `
+          <div class="card-thumb-wrap">
+            <span class="card-badge">${catBadge}</span>
+            ${releaseDate ? `<span class="card-date-badge">📅 ${releaseDate}</span>` : ''}
+            <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav(event, '${item.id}')">${isFav ? '❤️' : '🤍'}</button>
+            <img src="${thumb}" loading="lazy">
+          </div>
+          <div class="card-info">
+            <div class="card-title">${item.title}</div>
+            <div class="card-meta-row">
+              <span>👁️ ${viewsCount} views</span>
+            </div>
+            <div class="card-footer">
+              <span class="card-year">${year}</span>
+              <span class="card-platform ${platClass}">${platName}</span>
+            </div>
+          </div>
+        `;
+        cardsGrid.appendChild(card);
+      });
+    }
+
+    async function loadData() {
+      try {
+        const snap = await getDocs(collection(db, "movies"));
+        items = [];
+        snap.forEach(d => {
+          const val = d.data();
+          if (val.youtubeId && !val.youtubeId.startsWith("http")) {
+            items.push({ id: d.id, ...val });
+          }
+        });
+        render();
+        initHeroSlider(items);
+      } catch (err) {
+        cardsGrid.innerHTML = "<p style='color:red; grid-column:span 2;'>Failed to load.</p>";
+      }
+    }
+
+    loadData();
+  </script>
+</body>
+</html>

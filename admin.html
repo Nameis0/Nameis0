@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | WatchTeluguOTT</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #0b0c10; color: #fff; padding-bottom: 80px; }
+    .container { max-width: 650px; margin: 0 auto; padding: 15px; }
+
+    #adminPlayerWrap {
+      display: none;
+      background: #11131c;
+      border-bottom: 2px solid #ff385c;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .player-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ff385c;
+    }
+    .player-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 80%;
+    }
+    .player-close-btn {
+      background: #252839;
+      color: #fff;
+      border: none;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      background: #000;
+    }
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .card { background: #15161f; border: 1px solid #222533; border-radius: 12px; padding: 20px; margin-bottom: 25px; }
+    h2 { color: #ff385c; margin-bottom: 16px; font-size: 20px; }
+    .form-group { margin-bottom: 14px; }
+    label { display: block; margin-bottom: 5px; font-size: 13px; color: #9aa0b4; }
+    input, select { width: 100%; padding: 11px; background: #0c0d12; border: 1px solid #2c3042; border-radius: 8px; color: #fff; font-size: 14px; outline: none; }
+    input:focus, select:focus { border-color: #ff385c; }
+    button { width: 100%; padding: 12px; background: #ff385c; border: none; border-radius: 8px; color: #fff; font-size: 15px; font-weight: bold; cursor: pointer; }
+    button:disabled { background: #555; }
+    .btn-search { background: #2f354a; color: #fff; margin-top: 8px; }
+
+    #lockScreen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: #0b0c10; display: flex; justify-content: center; align-items: center;
+      z-index: 999999; padding: 20px;
+    }
+    .lock-box {
+      background: #15161f; border: 1px solid #222533;
+      padding: 26px 20px; border-radius: 14px; width: 100%; max-width: 320px; text-align: center;
+    }
+
+    .search-results { margin-top: 15px; display: flex; flex-direction: column; gap: 12px; }
+    .yt-result-card { display: flex; background: #0d0f17; border: 1px solid #222638; border-radius: 8px; overflow: hidden; gap: 10px; }
+    .yt-thumb { width: 120px; min-width: 120px; aspect-ratio: 16/9; background: #000; object-fit: cover; cursor: pointer; }
+    .yt-meta { padding: 8px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; }
+    .yt-title { font-size: 12px; font-weight: 700; line-height: 1.3; cursor: pointer; }
+    .card-actions { display: flex; gap: 8px; margin-top: 6px; }
+    .preview-btn { padding: 6px 10px; font-size: 11px; background: #2f354a; border: none; border-radius: 5px; color: #fff; font-weight: 700; cursor: pointer; }
+    .add-btn { padding: 6px 12px; font-size: 11px; background: #00d26a; border: none; border-radius: 5px; color: #000; font-weight: 800; cursor: pointer; }
+
+    .list-title { font-size: 16px; font-weight: bold; margin-bottom: 12px; color: #fff; }
+    .item-row { display: flex; align-items: center; justify-content: space-between; background: #14161f; border: 1px solid #222533; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; }
+    .item-title { font-size: 13px; font-weight: 600; max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
+    .item-actions { display: flex; gap: 8px; align-items: center; }
+    .play-btn-small { background: #3b4259; border: none; color: #fff; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; }
+    .del-btn { background: #e50914; border: none; color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <div id="lockScreen">
+    <div class="lock-box">
+      <h3 style="color:#ff385c; margin-bottom:8px;">Admin Passcode</h3>
+      <input type="password" id="pinInput" placeholder="Enter PIN" maxlength="6" style="text-align:center; font-size:20px; letter-spacing:5px; margin-bottom:14px;">
+      <button type="button" id="unlockBtn">Unlock Dashboard</button>
+      <div id="pinError" style="color:#ff4d4d; font-size:12px; margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <div id="adminPlayerWrap">
+    <div class="player-header">
+      <span class="player-title" id="adminPlayerTitle">Preview Video</span>
+      <button class="player-close-btn" onclick="closeAdminPlayer()">✕ Close</button>
+    </div>
+    <div class="video-container">
+      <iframe id="adminVideoIframe" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+    </div>
+  </div>
+
+  <div class="container" id="adminContent" style="display:none;">
+    <div class="card">
+      <h2>🔍 Search & Add Content</h2>
+      <p style="font-size:12px; color:#8f94a6; margin-bottom:12px;">యూట్యూబ్ లో కంటెంట్ సెర్చ్ చేసి కేటగిరీని ఎంచుకోండి.</p>
+
+      <div class="form-group">
+        <label>Search Title</label>
+        <input type="text" id="ytSearchQuery" placeholder="Ex: Pokiri full movie, Mayabazar retro, Devara...">
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <div class="form-group" style="flex:1;">
+          <label>Category</label>
+          <select id="autoCategory">
+            <option value="movie">Full Movie</option>
+            <option value="trailer">Trailer</option>
+            <option value="retro">Retro Classic</option>
+            <option value="comedy">Comedy Scene</option>
+            <option value="songs">Video Song</option>
+          </select>
+        </div>
+        <div class="form-group" style="flex:1;">
+          <label>Platform</label>
+          <select id="autoPlatform">
+            <option value="YouTube">YouTube</option>
+            <option value="Prime">Amazon Prime Video</option>
+            <option value="Netflix">Netflix</option>
+            <option value="aha">aha Video</option>
+            <option value="Hotstar">Disney+ Hotstar</option>
+            <option value="SunNXT">Sun NXT</option>
+            <option value="ZEE5">ZEE5</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Direct OTT Watch Link (Optional)</label>
+        <input type="text" id="ottDirectUrl" placeholder="https://app.primevideo.com/detail?gti=...">
+      </div>
+
+      <button type="button" class="btn-search" id="ytSearchBtn">Search YouTube</button>
+      <div class="search-results" id="searchResultsContainer"></div>
+    </div>
+
+    <div class="card">
+      <div class="list-title">Live on Website</div>
+      <div id="itemsContainer">Loading items...</div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+    const ADMIN_PIN = "528374";
+    const YOUTUBE_API_KEY = "AIzaSyDYQfkbxkjLvn8CDy5gnWA3QuBGAnLgqYQ";
+
+    const lockScreen = document.getElementById("lockScreen");
+    const adminContent = document.getElementById("adminContent");
+    const pinInput = document.getElementById("pinInput");
+    const unlockBtn = document.getElementById("unlockBtn");
+    const pinError = document.getElementById("pinError");
+
+    const adminPlayerWrap = document.getElementById("adminPlayerWrap");
+    const adminPlayerTitle = document.getElementById("adminPlayerTitle");
+    const adminVideoIframe = document.getElementById("adminVideoIframe");
+
+    window.playInAdmin = function(ytId, title) {
+      if (!ytId || ytId.startsWith("http")) return;
+      adminPlayerTitle.innerText = title;
+      adminVideoIframe.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0`;
+      adminPlayerWrap.style.display = "block";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.closeAdminPlayer = function() {
+      adminVideoIframe.src = "";
+      adminPlayerWrap.style.display = "none";
+    };
+
+    function unlock() {
+      lockScreen.style.display = "none";
+      adminContent.style.display = "block";
+      fetchItems();
+    }
+
+    if (sessionStorage.getItem("admin_logged") === "true") unlock();
+
+    unlockBtn.addEventListener("click", () => {
+      if (pinInput.value.trim() === ADMIN_PIN) {
+        sessionStorage.setItem("admin_logged", "true");
+        unlock();
+      } else {
+        pinError.innerText = "Incorrect PIN!";
+        pinInput.value = "";
+      }
+    });
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAkexz2MU9ndsby4KHOdz5de1SjkQ1-uSY",
+      authDomain: "watchteluguott-8c93c.firebaseapp.com",
+      projectId: "watchteluguott-8c93c",
+      storageBucket: "watchteluguott-8c93c.firebasestorage.app",
+      messagingSenderId: "351511803378",
+      appId: "1:351511803378:web:89cbf81bf67a12d0eca76b",
+      measurementId: "G-NJNP2Z3LX4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const itemsContainer = document.getElementById("itemsContainer");
+    const ytSearchQuery = document.getElementById("ytSearchQuery");
+    const ytSearchBtn = document.getElementById("ytSearchBtn");
+    const searchResultsContainer = document.getElementById("searchResultsContainer");
+    const autoCategory = document.getElementById("autoCategory");
+    const autoPlatform = document.getElementById("autoPlatform");
+    const ottDirectUrl = document.getElementById("ottDirectUrl");
+
+    ytSearchBtn.addEventListener("click", async () => {
+      const q = ytSearchQuery.value.trim();
+      if (!q) return;
+
+      ytSearchBtn.disabled = true;
+      ytSearchBtn.innerText = "Searching...";
+
+      try {
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(q)}&maxResults=5&type=video&key=${YOUTUBE_API_KEY}`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (!data.items || data.items.length === 0) {
+          searchResultsContainer.innerHTML = "<p style='color:#ff385c;'>No videos found.</p>";
+          return;
+        }
+
+        searchResultsContainer.innerHTML = "";
+        data.items.forEach(item => {
+          const videoId = item.id.videoId;
+          const title = item.snippet.title.replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+          const thumb = item.snippet.thumbnails.medium ? item.snippet.thumbnails.medium.url : item.snippet.thumbnails.default.url;
+
+          const row = document.createElement("div");
+          row.className = "yt-result-card";
+          row.innerHTML = `
+            <img class="yt-thumb" src="${thumb}" onclick='playInAdmin("${videoId}", ${JSON.stringify(title)})'>
+            <div class="yt-meta">
+              <div class="yt-title" onclick='playInAdmin("${videoId}", ${JSON.stringify(title)})'>${title}</div>
+              <div class="card-actions">
+                <button type="button" class="preview-btn" onclick='playInAdmin("${videoId}", ${JSON.stringify(title)})'>▶ Play</button>
+                <button type="button" class="add-btn" onclick='addVideo("${videoId}", ${JSON.stringify(title)})'>+ Add to Site</button>
+              </div>
+            </div>
+          `;
+          searchResultsContainer.appendChild(row);
+        });
+      } catch (err) {
+        searchResultsContainer.innerHTML = `<p style='color:red;'>Error: ${err.message}</p>`;
+      } finally {
+        ytSearchBtn.disabled = false;
+        ytSearchBtn.innerText = "Search YouTube";
+      }
+    });
+
+    window.addVideo = async function(ytId, title) {
+      try {
+        await addDoc(collection(db, "movies"), {
+          title: title,
+          youtubeId: ytId,
+          category: autoCategory.value,
+          year: "2026",
+          platform: autoPlatform.value,
+          ottUrl: ottDirectUrl.value.trim() || "",
+          createdAt: new Date().toISOString()
+        });
+
+        alert("✔ Successfully added!");
+        ottDirectUrl.value = "";
+        fetchItems();
+      } catch (err) {
+        alert("Failed to add: " + err.message);
+      }
+    };
+
+    async function fetchItems() {
+      try {
+        const snapshot = await getDocs(collection(db, "movies"));
+        itemsContainer.innerHTML = "";
+        if (snapshot.empty) {
+          itemsContainer.innerHTML = "<p style='color:#777;'>No items found.</p>";
+          return;
+        }
+        snapshot.forEach((d) => {
+          const data = d.data();
+          const row = document.createElement("div");
+          row.className = "item-row";
+          row.innerHTML = `
+            <span class="item-title" onclick='playInAdmin("${data.youtubeId}", ${JSON.stringify(data.title)})'>${data.title} <small style="color:#00d26a;">(${data.platform} - ${data.category})</small></span>
+            <div class="item-actions">
+              <button class="play-btn-small" onclick='playInAdmin("${data.youtubeId}", ${JSON.stringify(data.title)})'>▶ Play</button>
+              <button class="del-btn" onclick="deleteItem('${d.id}')">Delete</button>
+            </div>
+          `;
+          itemsContainer.appendChild(row);
+        });
+      } catch (err) {
+        itemsContainer.innerHTML = "<p style='color:red;'>Error fetching items.</p>";
+      }
+    }
+
+    window.deleteItem = async function(id) {
+      if (!confirm("Delete this?")) return;
+      try {
+        await deleteDoc(doc(db, "movies", id));
+        fetchItems();
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+  </script>
+</body>
+</html>

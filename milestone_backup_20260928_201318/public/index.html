@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WatchTeluguOTT - Latest Telugu Movies & OTT Streaming Guide</title>
+  <meta name="description" content="WatchTeluguOTT - Official guide for Telugu OTT release dates, upcoming movie trailers, and streaming platform updates.">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: #12141a; color: #fff; min-height: 100vh; }
+    
+    /* Header Section (MovieRulz Style) */
+    .mr-header { background: #181b24; padding: 25px 15px 15px; text-align: center; border-bottom: 2px solid #ff5500; }
+    .mr-logo { font-size: 28px; font-weight: 900; letter-spacing: 0.5px; color: #ffffff; text-decoration: none; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+    .mr-logo span { color: #ff5500; }
+    .mr-tagline { font-size: 12px; color: #94a3b8; margin-top: 5px; }
+
+    /* Search Bar */
+    .mr-search-wrap { display: flex; justify-content: center; gap: 6px; max-width: 500px; margin: 15px auto 5px; padding: 0 10px; }
+    .mr-search-input { flex: 1; padding: 10px 14px; background: #0c0e14; border: 1px solid #2d3748; border-radius: 4px; color: #fff; font-size: 14px; outline: none; }
+    .mr-search-input:focus { border-color: #ff5500; }
+    .mr-search-btn { background: #2d3748; color: #cbd5e1; border: 1px solid #4a5568; padding: 10px 18px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 13px; }
+    .mr-search-btn:hover { background: #ff5500; color: #fff; border-color: #ff5500; }
+
+    /* Category Navigation Menu */
+    .mr-nav { background: #1c202b; display: flex; flex-wrap: wrap; justify-content: center; gap: 2px; padding: 6px 10px; border-bottom: 1px solid #282e3e; }
+    .mr-nav-btn { background: transparent; border: none; color: #cbd5e1; padding: 8px 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; cursor: pointer; border-radius: 3px; letter-spacing: 0.5px; }
+    .mr-nav-btn:hover, .mr-nav-btn.active { background: #ff5500; color: #fff; }
+
+    /* Main Container */
+    .mr-container { max-width: 900px; margin: 0 auto; padding: 15px; }
+
+    /* Movie Grid (MovieRulz Posters Grid) */
+    .mr-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    @media (max-width: 480px) {
+      .mr-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    }
+    .mr-card { background: #181b24; border: 1px solid #262c3d; border-radius: 6px; overflow: hidden; cursor: pointer; transition: transform 0.15s ease, border-color 0.15s ease; position: relative; }
+    .mr-card:hover { transform: translateY(-3px); border-color: #ff5500; }
+    .mr-poster-wrap { width: 100%; aspect-ratio: 16/10; position: relative; background: #0c0e14; overflow: hidden; }
+    .mr-poster-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .mr-card-badge { position: absolute; top: 6px; right: 6px; background: rgba(255, 85, 0, 0.9); color: #fff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; }
+    .mr-card-info { padding: 8px 6px; }
+    .mr-card-title { font-size: 11px; font-weight: 700; color: #e2e8f0; line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .mr-card-meta { font-size: 10px; color: #ff9900; margin-top: 4px; font-weight: 600; }
+
+    /* Detail View (MovieRulz Single Page Layout) */
+    #detailView { display: none; background: #161922; border: 1px solid #262c3d; border-radius: 8px; padding: 16px; margin-bottom: 40px; }
+    .mr-back-btn { display: inline-flex; align-items: center; gap: 6px; background: #222736; color: #ff9900; border: 1px solid #364057; padding: 8px 14px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 12px; margin-bottom: 15px; }
+    .mr-detail-heading { font-size: 18px; font-weight: 700; color: #fff; border-bottom: 1px solid #2a3144; padding-bottom: 10px; margin-bottom: 16px; line-height: 1.3; }
+    .mr-detail-poster-wrap { text-align: center; margin-bottom: 20px; }
+    .mr-detail-poster { width: 100%; max-width: 280px; aspect-ratio: 16/10; object-fit: cover; border-radius: 6px; border: 1px solid #364057; box-shadow: 0 4px 20px rgba(0,0,0,0.7); }
+
+    .mr-section-title { border-left: 3px solid #ff5500; padding-left: 8px; font-size: 13px; font-weight: 800; color: #ff5500; text-transform: uppercase; letter-spacing: 0.5px; margin: 18px 0 10px; }
+    .mr-info-table { font-size: 13px; line-height: 1.9; color: #cbd5e1; }
+    .mr-info-table b { color: #f1f5f9; }
+    .mr-synopsis-box { background: #0c0e14; border: 1px solid #232838; border-radius: 6px; padding: 12px; font-size: 13px; line-height: 1.6; color: #94a3b8; }
+
+    /* Streaming & OTT Buttons (Replacing Torrents) */
+    .mr-stream-btn { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #1c212d; border: 1px solid #2d3748; border-radius: 6px; color: #fff; text-decoration: none; margin-bottom: 8px; transition: border-color 0.2s; }
+    .mr-stream-btn:hover { border-color: #ff5500; background: #222838; }
+    .mr-stream-tag { background: #ff5500; color: #fff; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 3px; }
+
+    /* Video Player Box */
+    #trailerBox { display: none; margin-top: 15px; border-radius: 6px; overflow: hidden; background: #000; border: 1px solid #282e3e; }
+    #trailerFrame { width: 100%; height: 260px; border: none; }
+
+    /* Floating / Kinda Admin Quick Link */
+    .admin-link { text-align: center; padding: 20px; font-size: 11px; color: #64748b; }
+    .admin-link a { color: #ff5500; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="mr-header">
+    <a href="/" class="mr-logo">WatchTelugu<span>OTT</span> <small style="font-size:13px; color:#ff9900;">Guide</small></a>
+    <div class="mr-tagline">Latest Telugu Movies — OTT Streaming & Release Dates</div>
+
+    <!-- Search Bar -->
+    <div class="mr-search-wrap">
+      <input type="text" id="searchInput" class="mr-search-input" placeholder="Search movies (e.g. Devara, Agadha)..." oninput="liveSearch()">
+      <button type="button" class="mr-search-btn" onclick="liveSearch()">Search</button>
+    </div>
+  </header>
+
+  <!-- Navigation Menu -->
+  <nav class="mr-nav">
+    <button class="mr-nav-btn active" onclick="filterCategory('ALL', this)">HOME</button>
+    <button class="mr-nav-btn" onclick="filterCategory('FEATURED', this)">FEATURED</button>
+    <button class="mr-nav-btn" onclick="filterCategory('Netflix', this)">NETFLIX</button>
+    <button class="mr-nav-btn" onclick="filterCategory('Prime Video', this)">PRIME</button>
+    <button class="mr-nav-btn" onclick="filterCategory('Aha Video', this)">AHA</button>
+    <button class="mr-nav-btn" onclick="filterCategory('Trailer', this)">TRAILERS</button>
+  </nav>
+
+  <!-- Content Container -->
+  <main class="mr-container">
+    
+    <!-- View 1: Posters Feed -->
+    <div id="gridView">
+      <div class="mr-section-title" id="gridTitle">LATEST TELUGU MOVIES & RELEASES</div>
+      <div class="mr-grid" id="moviesGrid">
+        <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b;">Loading movies...</div>
+      </div>
+    </div>
+
+    <!-- View 2: MovieRulz Detail Page -->
+    <div id="detailView">
+      <button class="mr-back-btn" onclick="goBackToGrid()">← Back to Movies List</button>
+
+      <h1 class="mr-detail-heading" id="dtHeading">Movie Title (2026) HDRip [Telugu]</h1>
+
+      <div class="mr-detail-poster-wrap">
+        <img id="dtPoster" class="mr-detail-poster" src="" alt="Movie Poster">
+      </div>
+
+      <div class="mr-section-title" id="dtInfoTitle">MOVIE INFORMATION</div>
+      <div class="mr-info-table">
+        <div><b>OTT Platform:</b> <span id="dtPlatform" style="color: #00e676; font-weight: bold;"></span></div>
+        <div><b>Release Date:</b> <span id="dtRelease" style="color: #ff9900;"></span></div>
+        <div><b>Language:</b> <span>Telugu</span></div>
+        <div><b>Quality:</b> <span>Official HD / 4K UHD</span></div>
+      </div>
+
+      <div class="mr-section-title">SYNOPSIS</div>
+      <div class="mr-synopsis-box" id="dtSynopsis">
+        Movie description will appear here...
+      </div>
+
+      <!-- Video Player -->
+      <div id="trailerBox">
+        <iframe id="trailerFrame" src="" allowfullscreen></iframe>
+      </div>
+
+      <div class="mr-section-title">STREAM & WATCH OFFICIAL LINKS</div>
+      <div id="dtStreams">
+        <a id="dtOttBtn" class="mr-stream-btn" href="#" target="_blank">
+          <span style="font-weight: bold;"><span style="color:#ff5500;">▶</span> <span id="dtOttText">Watch on OTT</span></span>
+          <span class="mr-stream-tag">STREAM NOW</span>
+        </a>
+
+        <div id="dtTrailerBtn" class="mr-stream-btn" style="cursor: pointer;" onclick="toggleTrailer()">
+          <span style="font-weight: bold;"><span style="color:#ff2d55;">🎬</span> Play Official Trailer</span>
+          <span class="mr-stream-tag" style="background:#4a5568;">TRAILER</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="admin-link">
+      WatchTeluguOTT Engine &bull; <a href="/admin.html">Admin Panel</a>
+    </div>
+
+  </main>
+
+  <!-- Firebase Integration -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAkexz2MU9ndsby4KHOdz5de1SjkQ1-uSY",
+      authDomain: "watchteluguott-8c93c.firebaseapp.com",
+      projectId: "watchteluguott-8c93c",
+      storageBucket: "watchteluguott-8c93c.appspot.com",
+      messagingSenderId: "1074128527265",
+      appId: "1:1074128527265:web:53177ce778000b957640f0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let rawMovies = [];
+    let currentFiltered = [];
+    let currentPlayingYt = "";
+
+    // Real-time listener for Firestore movies collection
+    const q = query(collection(db, "movies"), orderBy("createdAt", "desc"));
+    onSnapshot(q, (snapshot) => {
+      rawMovies = [];
+      snapshot.forEach(docSnap => {
+        rawMovies.push({ id: docSnap.id, ...docSnap.data() });
+      });
+      currentFiltered = rawMovies;
+      renderGrid(currentFiltered);
+    }, (error) => {
+      console.error("Firestore error:", error);
+      document.getElementById("moviesGrid").innerHTML = "<div style=\"grid-column: 1/-1; text-align: center; color: #ff5252;\">Error loading content: " + error.message + "</div>";
+    });
+
+    window.renderGrid = function(list) {
+      const grid = document.getElementById("moviesGrid");
+      if (!list || list.length === 0) {
+        grid.innerHTML = "<div style=\"grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b;\">No movies found.</div>";
+        return;
+      }
+
+      grid.innerHTML = list.map((m, idx) => {
+        const title = m.title || m.title_te || "Telugu Movie";
+        const yt = m.youtubeId || m.ytId || "";
+        const poster = m.poster || (yt ? `https://img.youtube.com/vi/${yt}/hqdefault.jpg` : "/logo.png");
+        const plat = m.platform || "OTT";
+
+        const isRealOtt = plat && plat.toLowerCase() !== "youtube" && plat.toLowerCase() !== "ott";
+        const badgeHtml = isRealOtt ? `<span class="mr-card-badge">${plat}</span>` : "";
+        
+        let metaHtml = "";
+        if (isRealOtt) {
+          const rel = m.releaseDate && m.releaseDate !== "Available Now" ? m.releaseDate : "Streaming on " + plat;
+          metaHtml = `<div class="mr-card-meta">${rel}</div>`;
+        }
+
+        return `
+          <div class="mr-card" onclick="openDetail(${idx})">
+            <div class="mr-poster-wrap">
+              <img class="mr-poster-img" src="${poster}" alt="${title}" loading="lazy">
+              ${badgeHtml}
+            </div>
+            <div class="mr-card-info">
+              <div class="mr-card-title">${title}</div>
+              ${metaHtml}
+            </div>
+          </div>
+        `;
+      }).join("");
+    };
+
+    window.liveSearch = function() {
+      const qVal = (document.getElementById("searchInput").value || "").toLowerCase().trim();
+      if (!qVal) {
+        currentFiltered = rawMovies;
+      } else {
+        currentFiltered = rawMovies.filter(m => {
+          const t = (m.title || "").toLowerCase();
+          const p = (m.platform || "").toLowerCase();
+          const d = (m.description || "").toLowerCase();
+          return t.includes(qVal) || p.includes(qVal) || d.includes(qVal);
+        });
+      }
+      renderGrid(currentFiltered);
+    };
+
+    window.filterCategory = function(cat, btn) {
+      document.querySelectorAll(".mr-nav-btn").forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+
+      if (cat === "ALL") {
+        currentFiltered = rawMovies;
+        document.getElementById("gridTitle").innerText = "LATEST TELUGU MOVIES & RELEASES";
+      } else if (cat === "FEATURED") {
+        currentFiltered = rawMovies.filter(m => m.isUpcoming || m.isThisWeek);
+        document.getElementById("gridTitle").innerText = "FEATURED OTT RELEASES";
+      } else if (cat === "Trailer") {
+        currentFiltered = rawMovies.filter(m => m.category === "Trailer");
+        document.getElementById("gridTitle").innerText = "LATEST TELUGU TRAILERS";
+      } else {
+        currentFiltered = rawMovies.filter(m => (m.platform || "").toLowerCase() === cat.toLowerCase());
+        document.getElementById("gridTitle").innerText = `${cat.toUpperCase()} TELUGU RELEASES`;
+      }
+      renderGrid(currentFiltered);
+      goBackToGrid();
+    };
+
+    window.openDetail = function(idx) {
+      const m = currentFiltered[idx];
+      if (!m) return;
+
+      document.getElementById("gridView").style.display = "none";
+      document.getElementById("detailView").style.display = "block";
+
+      const title = m.title || m.title_te || "Untitled Movie";
+      const yt = m.youtubeId || m.ytId || "";
+      const poster = m.poster || (yt ? `https://img.youtube.com/vi/${yt}/maxresdefault.jpg` : "/logo.png");
+      currentPlayingYt = yt;
+
+      document.getElementById("dtHeading").innerText = `${title} HDRip [Telugu]`;
+      document.getElementById("dtPoster").src = poster;
+      document.getElementById("dtInfoTitle").innerText = `${title.toUpperCase()} MOVIE INFORMATION`;
+      document.getElementById("dtPlatform").innerText = m.platform || "OTT Available";
+      document.getElementById("dtRelease").innerText = m.releaseDate || "Available Now";
+      document.getElementById("dtSynopsis").innerText = m.description || "Exciting Telugu movie streaming on digital platforms. Watch the official trailer or tap below to start streaming immediately on official platforms.";
+
+      const ottBtn = document.getElementById("dtOttBtn");
+      const ottText = document.getElementById("dtOttText");
+      const platStr = (m.platform || "").toLowerCase();
+      const isOtt = platStr && platStr !== "youtube" && platStr !== "ott";
+
+      if (isOtt) {
+        ottBtn.style.display = "flex";
+        if (m.ottLink && m.ottLink.startsWith("http")) {
+          ottBtn.href = m.ottLink;
+        } else {
+          ottBtn.href = `https://www.google.com/search?q=${encodeURIComponent(title + " " + m.platform + " watch online")}`;
+        }
+        ottText.innerText = `Watch on ${m.platform}`;
+      } else {
+        // Platform YouTube ayithe OTT stream button avasaram ledhu
+        ottBtn.style.display = "none";
+      }
+
+      // Reset trailer box
+      const tBox = document.getElementById("trailerBox");
+      const tFrame = document.getElementById("trailerFrame");
+      tBox.style.display = "none";
+      tFrame.src = "";
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    window.toggleTrailer = function() {
+      const tBox = document.getElementById("trailerBox");
+      const tFrame = document.getElementById("trailerFrame");
+      if (!currentPlayingYt) {
+        alert("Trailer available ledhu!");
+        return;
+      }
+      if (tBox.style.display === "block") {
+        tBox.style.display = "none";
+        tFrame.src = "";
+      } else {
+        tBox.style.display = "block";
+        tFrame.src = `https://www.youtube.com/embed/${currentPlayingYt}?autoplay=1`;
+      }
+    };
+
+    window.goBackToGrid = function() {
+      const tBox = document.getElementById("trailerBox");
+      const tFrame = document.getElementById("trailerFrame");
+      if (tBox) tBox.style.display = "none";
+      if (tFrame) tFrame.src = "";
+
+      document.getElementById("detailView").style.display = "none";
+      document.getElementById("gridView").style.display = "block";
+    };
+  </script>
+</body>
+</html>

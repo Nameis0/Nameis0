@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - WatchTeluguOTT</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #07090e; color: #fff; padding: 15px; }
+    .header { font-size: 18px; font-weight: 800; color: #ffd700; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; }
+    .card { background: #121520; border: 1px solid #1f2538; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+    label { font-size: 12px; color: #8c93a8; display: block; margin-top: 10px; margin-bottom: 4px; }
+    input, select { width: 100%; padding: 10px; background: #181c2b; border: 1px solid #283049; border-radius: 8px; color: #fff; font-size: 13px; outline: none; }
+    input:focus, select:focus { border-color: #ffd700; }
+    .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 14px; }
+    .btn-primary { background: #ff2d55; color: #fff; }
+    .btn-search { width: auto; padding: 0 16px; background: #ffd700; color: #000; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; }
+    .checkbox-wrap { display: flex; align-items: center; gap: 8px; margin-top: 12px; cursor: pointer; font-size: 12px; }
+    .checkbox-wrap input { width: 18px; height: 18px; }
+    .search-box-wrap { display: flex; gap: 8px; margin-top: 4px; }
+    #playerBox { display: none; margin-top: 12px; background: #000; border: 1px solid #ffd700; border-radius: 8px; padding: 10px; }
+    #ytResults { max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+    .yt-item { display: flex; align-items: center; gap: 10px; background: #181c2b; padding: 8px; border-radius: 6px; cursor: pointer; border: 1px solid #283049; }
+    .yt-item:hover { border-color: #ffd700; }
+    .yt-item img { width: 75px; height: 45px; border-radius: 4px; object-fit: cover; }
+    .yt-item-title { font-size: 12px; font-weight: bold; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px; }
+    .yt-item-sub { font-size: 10px; color: #8c93a8; }
+    .list-item { background: #121520; border: 1px solid #1f2538; border-radius: 10px; padding: 12px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .list-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+    .list-title { font-weight: bold; font-size: 13px; color: #fff; line-height: 1.3; }
+    .list-meta { font-size: 11px; color: #8c93a8; margin-top: 2px; }
+    .badge-btn { display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; border: 1px solid #283049; background: #181c2b; color: #8c93a8; }
+    .actions-bar { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; flex-wrap: wrap; gap: 6px; }
+    .date-input-mini { width: 90px !important; padding: 4px 6px !important; font-size: 11px !important; }
+    .auth-banner { background: #0f172a; border: 1px solid #334155; padding: 12px; border-radius: 8px; margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+
+  <!-- Login Gatekeeper Banner -->
+  <div id="authBanner" class="auth-banner">
+    <div style="font-size: 13px; font-weight: bold; margin-bottom: 8px; color: #38bdf8;">🔐 Admin Security Login</div>
+    <div id="loggedOutView" style="display: flex; gap: 8px;">
+      <input type="password" id="adminPasswordInput" onkeydown="if(event.key==='Enter') window.doAdminLogin()" placeholder="Firebase Admin Password" style="flex: 1; padding: 8px;">
+      <button type="button" id="btnLogin" onclick="window.doAdminLogin()" style="padding: 8px 16px; background: #2563eb; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Login</button>
+    </div>
+    <div id="loggedInView" style="display: none; align-items: center; justify-content: space-between;">
+      <span style="font-size: 12px; color: #4ade80;">✔ Authenticated Admin: k.vishnu27492@gmail.com</span>
+      <button type="button" id="btnLogout" style="padding: 4px 10px; background: #ef4444; color: #fff; border: none; border-radius: 6px; font-size: 11px; cursor: pointer;">Logout</button>
+    </div>
+  </div>
+
+  <div class="header">
+    <span>⚡ WatchTeluguOTT Content Admin</span>
+  </div>
+
+  <!-- TMDB 1-Click Auto Fetch -->
+  <div class="card" style="background: linear-gradient(135deg, #1e1b4b 0%, #172554 100%); border: 1px solid #3b82f6;">
+    <div style="font-weight: 800; color: #60a5fa; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+      ⚡ 1-Click "Where to Watch" Auto Fetch
+    </div>
+    <div class="search-box-wrap">
+      <input type="text" id="tmdbMovieQuery" placeholder="Movie Name (e.g. Devara, Kalki 2898 AD)" style="border-color: #3b82f6;">
+      <button type="button" id="btnTmdbFetch" style="padding: 0 16px; background: #3b82f6; color: #fff; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; font-size: 13px;">Auto Fetch</button>
+    </div>
+    <div id="tmdbFetchStatus" style="font-size: 11px; color: #93c5fd; margin-top: 6px;"></div>
+  </div>
+
+  <div class="card">
+    <form id="contentForm">
+      <label>Movie / Video Title</label>
+      <input type="text" id="movieTitle" required placeholder="e.g. Agadha">
+
+      <label>🔍 Search YouTube for Real Trailer:</label>
+      <div class="search-box-wrap">
+        <input type="text" id="ytSearchInput" placeholder="Cinema peru kotti search cheyandi">
+        <button type="button" class="btn-search" id="btnSearch">Search</button>
+      </div>
+
+      <div id="playerBox">
+        <iframe id="verifyFrame" width="100%" height="180" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="border-radius:6px; margin-bottom:10px;"></iframe>
+        <div id="selectedNote" style="font-size:12px; color:#00e676; font-weight:bold; margin-bottom:8px;"></div>
+        <label style="margin-top:0;">Top YouTube Results (Click to Preview & Select):</label>
+        <div id="ytResults"></div>
+      </div>
+
+      <label>YouTube Video ID</label>
+      <input type="text" id="movieYtId" required placeholder="Auto-fills on selection or paste ID">
+
+      
+      <label>Movie Description / Overview</label>
+      <textarea id="movieDescription" rows="3" placeholder="Movie synopsis or story..."></textarea>
+      <input type="hidden" id="moviePoster">
+    
+      <label>Platform</label>
+      <select id="moviePlatform">
+        <option value="YouTube">YouTube</option>
+        <option value="Netflix">Netflix</option>
+        <option value="Prime Video">Prime Video</option>
+        <option value="Aha Video">Aha Video</option>
+        <option value="Disney+ Hotstar">Disney+ Hotstar</option>
+        <option value="ZEE5">ZEE5</option>
+        <option value="SonyLIV">SonyLIV</option>
+        <option value="Theatres">Theatres</option>
+      </select>
+
+      <label>Category</label>
+      <select id="movieCategory">
+        <option value="Trailer">Trailer</option>
+        <option value="Teaser">Teaser</option>
+        <option value="Full Movie">Full Movie</option>
+        <option value="Song">Song</option>
+        <option value="Short Film">Short Film</option>
+      </select>
+
+      <label>OTT Release Date (e.g. Oct 2, Oct 15, Releasing Soon)</label>
+      <input type="text" id="movieReleaseDate" placeholder="e.g. Oct 2, Oct 15, Releasing Soon">
+
+      <label>OTT Direct Link (Optional)</label>
+      <input type="url" id="movieOttLink" placeholder="https://www.primevideo.com/detail/...">
+
+      <label class="checkbox-wrap">
+        <input type="checkbox" id="movieUpcoming">
+        <span>⏳ Show in "Upcoming on OTT" Hero Slider (Max 5)</span>
+      </label>
+
+      <label class="checkbox-wrap">
+        <input type="checkbox" id="movieThisWeek">
+        <span>📅 Mark as "This Week OTT Release"</span>
+      </label>
+
+      <button type="submit" class="btn btn-primary" id="submitBtn">➕ Add Content</button>
+    </form>
+  </div>
+
+  <div class="header">
+    <span>All Content & Live Controls</span>
+  </div>
+  <div id="contentList"></div>
+
+  <!-- Firebase Modular SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, collection, doc, addDoc, getDocs, updateDoc, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAkexz2MU9ndsby4KHOdz5de1SjkQ1-uSY",
+      authDomain: "watchteluguott-8c93c.firebaseapp.com",
+      projectId: "watchteluguott-8c93c",
+      storageBucket: "watchteluguott-8c93c.appspot.com",
+      messagingSenderId: "1074128527265",
+      appId: "1:1074128527265:web:53177ce778000b957640f0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const YT_KEY = "AIzaSyDYQfkbxkjLvn8CDy5gnWA3QuBGAnLgqYQ";
+    const TMDB_API_KEY = "51727782be64c567f2bd78ecde304006";
+
+    // Authentication State Management
+    onAuthStateChanged(auth, (user) => {
+      const loggedOutView = document.getElementById("loggedOutView");
+      const loggedInView = document.getElementById("loggedInView");
+      if (user && user.email === "k.vishnu27492@gmail.com") {
+        loggedOutView.style.display = "none";
+        loggedInView.style.display = "flex";
+      } else {
+        loggedOutView.style.display = "flex";
+        loggedInView.style.display = "none";
+      }
+    });
+
+    window.doAdminLogin = async function() {
+      const passInp = document.getElementById("adminPasswordInput");
+      const pass = passInp ? passInp.value.trim() : "";
+      if (!pass) {
+        alert("Password enter cheyandi!");
+        return;
+      }
+      try {
+        await signInWithEmailAndPassword(auth, "k.vishnu27492@gmail.com", pass);
+        alert("Admin Login Successful!");
+      } catch (e) {
+        console.error(e);
+        alert("Login Failed: " + e.message);
+      }
+    };
+
+    document.getElementById("btnLogout").addEventListener("click", async () => {
+      await signOut(auth);
+      alert("Logged out!");
+    });
+
+    // TMDB Auto Fetch
+    document.getElementById("btnTmdbFetch").addEventListener("click", async () => {
+      const q = document.getElementById("tmdbMovieQuery").value.trim();
+      const status = document.getElementById("tmdbFetchStatus");
+      if (!q) return alert("Cinema peru enter cheyandi!");
+      status.innerText = "TMDB nundi data techukuntunnam...";
+      try {
+        const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(q)}&language=en-US`);
+        const data = await res.json();
+        if (!data.results || data.results.length === 0) {
+          status.innerText = "❌ Details dhorakaledhu!";
+          return;
+        }
+        const m = data.results[0];
+        const pRes = await fetch(`https://api.themoviedb.org/3/movie/${m.id}/watch/providers?api_key=${TMDB_API_KEY}`);
+        const pData = await pRes.json();
+        const inP = (pData.results && pData.results.IN) ? pData.results.IN : null;
+        let provs = [];
+        let link = "";
+        if (inP) {
+          link = inP.link || "";
+          if (inP.flatrate) provs = inP.flatrate.map(p => p.provider_name);
+          else if (inP.rent) provs = inP.rent.map(p => p.provider_name);
+          else if (inP.buy) provs = inP.buy.map(p => p.provider_name);
+        }
+        const vRes = await fetch(`https://api.themoviedb.org/3/movie/${m.id}/videos?api_key=${TMDB_API_KEY}`);
+        const vData = await vRes.json();
+        let ytKey = "";
+        if (vData.results && vData.results.length > 0) {
+          const tr = vData.results.find(v => v.site === "YouTube" && (v.type === "Trailer" || v.type === "Teaser")) || vData.results[0];
+          if (tr) ytKey = tr.key;
+        }
+        document.getElementById("movieTitle").value = m.title;
+        if (m.overview) {
+          const dEl = document.getElementById("movieDescription");
+          if (dEl) dEl.value = m.overview;
+        }
+        if (m.poster_path) {
+          const pEl = document.getElementById("moviePoster");
+          if (pEl) pEl.value = "https://image.tmdb.org/t/p/w500" + m.poster_path;
+        }
+        if (ytKey) document.getElementById("movieYtId").value = ytKey;
+        if (provs.length > 0) {
+          document.getElementById("movieReleaseDate").value = "Streaming on " + provs.join(", ");
+        } else {
+          document.getElementById("movieReleaseDate").value = m.release_date ? ("Release: " + m.release_date) : "Coming Soon";
+        }
+        if (link) document.getElementById("movieOttLink").value = link;
+        status.innerHTML = `<span style="color:#4ade80;">✔ Auto-filled for <b>${m.title}</b>! OTT: ${provs.join(", ") || "Theatrical"}</span>`;
+      } catch (err) {
+        status.innerText = "❌ TMDB Error: " + err.message;
+      }
+    });
+
+    // YouTube Search
+    document.getElementById("btnSearch").addEventListener("click", async () => {
+      let q = document.getElementById("ytSearchInput").value.trim() || document.getElementById("movieTitle").value.trim();
+      if (!q) return alert("Search cheyadaniki cinema peru enter cheyandi");
+      const box = document.getElementById("playerBox");
+      const list = document.getElementById("ytResults");
+      const frame = document.getElementById("verifyFrame");
+      const note = document.getElementById("selectedNote");
+      box.style.display = "block";
+      list.innerHTML = "<div style='color:#ffd700; font-size:12px; padding:5px;'>YouTube lo vetukuthondi...</div>";
+      note.innerText = "";
+      try {
+        const queryStr = encodeURIComponent(q + " Telugu Trailer");
+        const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${queryStr}&type=video&key=${YT_KEY}`);
+        const data = await res.json();
+        if (data.error) throw new Error(data.error.message);
+        if (!data.items || data.items.length === 0) {
+          list.innerHTML = "<div style='color:#ff5252; font-size:12px;'>No videos found.</div>";
+          return;
+        }
+        list.innerHTML = "";
+        data.items.forEach(item => {
+          const vidId = item.id.videoId;
+          const snippet = item.snippet;
+          const div = document.createElement("div");
+          div.className = "yt-item";
+          div.innerHTML = `
+            <img src="${snippet.thumbnails.default.url}">
+            <div style="flex:1; overflow:hidden;">
+              <div class="yt-item-title">${snippet.title}</div>
+              <div class="yt-item-sub">${snippet.channelTitle}</div>
+            </div>
+            <button type="button" style="padding:5px 10px; background:#00e676; border:none; border-radius:4px; font-weight:bold; font-size:10px; cursor:pointer;">Select</button>
+          `;
+          div.addEventListener("click", () => {
+            frame.src = `https://www.youtube.com/embed/${vidId}?autoplay=1`;
+            document.getElementById("movieYtId").value = vidId;
+            note.innerText = "✔ Selected: " + snippet.title;
+            if (!document.getElementById("movieTitle").value) document.getElementById("movieTitle").value = snippet.title;
+          });
+          list.appendChild(div);
+        });
+        const first = data.items[0];
+        frame.src = `https://www.youtube.com/embed/${first.id.videoId}`;
+        document.getElementById("movieYtId").value = first.id.videoId;
+        note.innerText = "✔ Previewing: " + first.snippet.title;
+      } catch (e) {
+        list.innerHTML = `<div style='color:#ff5252; font-size:12px;'>Error: ${e.message}</div>`;
+      }
+    });
+
+    // Content Add
+    document.getElementById("contentForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!auth.currentUser) {
+        alert("Alert: Admin Login avvaledhu! Paina login button nokki pass enter cheyandi.");
+        return;
+      }
+      console.log("Submitting as user:", auth.currentUser.email);
+      const submitBtn = document.getElementById("submitBtn");
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Adding...";
+      try {
+        let ytVal = document.getElementById("movieYtId").value.trim();
+        const match = ytVal.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/))([a-zA-Z0-9_-]{11})/);
+        const finalYtId = match ? match[1] : ytVal;
+        const relDate = document.getElementById("movieReleaseDate").value.trim() || "Available Now";
+
+        await addDoc(collection(db, "movies"), {
+          title: document.getElementById("movieTitle").value.trim(),
+          title_te: document.getElementById("movieTitle").value.trim(),
+          youtubeId: finalYtId,
+          ytId: finalYtId,
+          platform: document.getElementById("moviePlatform").value,
+          category: document.getElementById("movieCategory").value,
+          releaseDate: relDate,
+          ottLink: document.getElementById("movieOttLink").value.trim() || "",
+          description: (document.getElementById("movieDescription") ? document.getElementById("movieDescription").value.trim() : ""),
+          poster: (document.getElementById("moviePoster") ? document.getElementById("moviePoster").value.trim() : ""),
+          isUpcoming: document.getElementById("movieUpcoming").checked,
+          isThisWeek: document.getElementById("movieThisWeek").checked,
+          createdAt: serverTimestamp()
+        });
+
+        alert("Content Added Successfully!");
+        document.getElementById("contentForm").reset();
+        document.getElementById("playerBox").style.display = "none";
+        loadList();
+      } catch (err) {
+        alert("Error: " + err.message);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "➕ Add Content";
+      }
+    });
+
+    // Load List
+    async function loadList() {
+      const listEl = document.getElementById("contentList");
+      try {
+        const qSnap = await getDocs(query(collection(db, "movies"), orderBy("createdAt", "desc")));
+        listEl.innerHTML = "";
+        qSnap.forEach(dSnap => {
+          const item = dSnap.data();
+          const id = dSnap.id;
+          const isUp = !!item.isUpcoming;
+          const isWk = !!item.isThisWeek;
+          const curDate = item.releaseDate || "";
+
+          const div = document.createElement("div");
+          div.className = "list-item";
+          div.innerHTML = `
+            <div class="list-header">
+              <div style="flex:1;">
+                <div class="list-title">${item.title || "Untitled"}</div>
+                <div class="list-meta">${item.platform || "Platform"} • ${item.category || "Category"}</div>
+              </div>
+              <button onclick="window.delItem('${id}')" style="padding:5px 8px; background:#ff2d55; border:none; border-radius:6px; color:#fff; cursor:pointer; font-weight:bold;">✕</button>
+            </div>
+            <div class="actions-bar">
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="badge-btn ${isUp ? 'active-hero' : ''}" onclick="window.toggleUpcoming('${id}', ${isUp})">
+                  ⏳ Hero Slider ${isUp ? '✓' : ''}
+                </button>
+                <button type="button" class="badge-btn ${isWk ? 'active-week' : ''}" onclick="window.toggleThisWeek('${id}', ${isWk})">
+                  📅 This Week ${isWk ? '✓' : ''}
+                </button>
+              </div>
+              <div style="display:flex; align-items:center; gap:4px;">
+                <input type="text" class="date-input-mini" id="date_${id}" value="${curDate}" placeholder="e.g. Oct 2">
+                <button type="button" onclick="window.saveDate('${id}')" style="padding:4px 8px; background:#ffd700; color:#000; font-weight:bold; font-size:10px; border:none; border-radius:4px; cursor:pointer;">Save</button>
+              </div>
+            </div>
+          `;
+          listEl.appendChild(div);
+        });
+      } catch (e) { console.error(e); }
+    }
+
+    window.toggleUpcoming = async (id, currentState) => {
+      try {
+        await updateDoc(doc(db, "movies", id), { isUpcoming: !currentState });
+        loadList();
+      } catch (e) { alert("Update failed: " + e.message); }
+    };
+
+    window.toggleThisWeek = async (id, currentState) => {
+      try {
+        await updateDoc(doc(db, "movies", id), { isThisWeek: !currentState });
+        loadList();
+      } catch (e) { alert("Update failed: " + e.message); }
+    };
+
+    window.saveDate = async (id) => {
+      const val = document.getElementById("date_" + id).value.trim();
+      try {
+        await updateDoc(doc(db, "movies", id), { releaseDate: val || "Available Now" });
+        alert("Date updated!");
+        loadList();
+      } catch (e) { alert("Date update failed: " + e.message); }
+    };
+
+    window.delItem = async (id) => {
+      if (confirm("Delete this content?")) {
+        await deleteDoc(doc(db, "movies", id));
+        loadList();
+      }
+    };
+
+    loadList();
+  </script>
+</body>
+</html>

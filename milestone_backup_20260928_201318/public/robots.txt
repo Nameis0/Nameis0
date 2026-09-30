@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://watchteluguott-8c93c.web.app/sitemap.xml
